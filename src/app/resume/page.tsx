@@ -19,7 +19,7 @@ export default function ResumePage() {
           className="w-full h-full"
         >
           <div className="flex flex-col items-center justify-center h-full p-8 bg-gray-50 dark:bg-gray-900 text-center">
-            <p className="mb-4">It looks like your browser doesn't support built-in PDFs.</p>
+            <p className="mb-4">It looks like your browser doesn&apos;t support built-in PDFs.</p>
             <a 
               href="/resume.pdf" 
               className="text-blue-600 dark:text-blue-400 hover:underline"

@@ -16,8 +16,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kelvin's Personal Website",
+  title: {
+    default: "Kelvin's Personal Website",
+    template: "%s | Kelvin's Portfolio"
+  },
   description: "Portfolio and blog showcasing past, current, and future projects.",
+  openGraph: {
+    title: "Kelvin's Personal Website",
+    description: "Portfolio and blog showcasing past, current, and future projects.",
+    url: "https://yourdomain.com",
+    siteName: "Kelvin's Portfolio",
+    locale: "en_US",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="1.5"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="cybersecurity.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="12.484375"
+     inkscape:cx="18.503129"
+     inkscape:cy="19.744681"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8" />
+  <!-- Network Nodes -->
+  <!-- Top Left -->
+  <!-- Top Right -->
+  <!-- Far Left -->
+  <!-- Far Right -->
+  <!-- Bottom Left -->
+  <!-- Bottom Right -->
+  <!-- Top Center -->
+  <path
+     d="m 12.04248,6.4195578 0,-1.4948538"
+     id="path7"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <circle
+     cx="12.032182"
+     cy="3.5654316"
+     r="1.25"
+     id="circle2-5"
+     style="stroke-width:0.9375" />
+  <!-- Half-sized Lock in the Center -->
+  <g
+     transform="translate(6, 7.5) scale(0.5)"
+     stroke-width="3"
+     fill="none"
+     id="g8">
+    <rect
+       x="3"
+       y="11"
+       width="18"
+       height="11"
+       rx="2"
+       ry="2"
+       id="rect7" />
+    <path
+       d="M7 11V7a5 5 0 0 1 10 0v4"
+       id="path8" />
+  </g>
+  <path
+     d="m 17.050704,10.556693 h 3.680672"
+     id="path10"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="M 20.723331,8.4240271 V 10.384513"
+     id="path11"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <circle
+     cx="20.720903"
+     cy="6.8013139"
+     r="1.25"
+     id="circle11"
+     style="stroke-width:0.9375" />
+  <path
+     d="m 18.792883,15.723151 h 1.600035"
+     id="path12"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <circle
+     cx="21.772217"
+     cy="15.66239"
+     r="1.25"
+     id="circle12"
+     style="stroke-width:0.9375" />
+  <path
+     d="M 6.6021094,10.126422 H 4.6416235"
+     id="path13"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="M 4.6370945,10.048429 V 8.8203761 m 0,-1.6751297 0,-1.3181655"
+     id="path14"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cccc" />
+  <circle
+     cx="4.6195264"
+     cy="4.2833138"
+     r="1.25"
+     id="circle15"
+     style="stroke-width:0.9375" />
+  <path
+     d="M 5.2822257,13.436287 H 3.3217398"
+     id="path15"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="M 3.155036,15.393559 V 13.433073"
+     id="path16"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <circle
+     cx="3.1473207"
+     cy="16.790983"
+     r="1.25"
+     id="circle16"
+     style="stroke-width:0.9375" />
+  <path
+     d="M 10.889324,21.769021 V 20.487582"
+     id="path17"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <circle
+     cx="7.309669"
+     cy="21.719124"
+     r="1.25"
+     id="circle18"
+     style="stroke-width:0.9375" />
+  <path
+     d="M 10.680141,21.808287 H 8.7196553"
+     id="path18"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="M 13.953154,21.769021 V 20.402623"
+     id="path19"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="m 18.429828,21.808287 h -1.36121 m -1.701145,0 h -1.421285"
+     id="path20"
+     style="stroke-width:1.12264"
+     sodipodi:nodetypes="cccc" />
+  <circle
+     cx="19.909889"
+     cy="21.639862"
+     r="1.25"
+     id="circle20"
+     style="stroke-width:0.9375" />
+</svg>
