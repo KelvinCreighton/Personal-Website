@@ -11,9 +11,17 @@ export default function MusicProjects() {
       image: `/images/projects/The-Longest-Moment-Before-a-New-Beginning.png`,
       link: `/projects/music/the-longest-moment`
     },
-    ...Array.from({ length: 5 }).map((_, i) => ({
-      id: i + 2,
-      title: `Music Project ${i + 2}`,
+    {
+      id: 2,
+      title: `Beethoven Virus`,
+      date: `March 2026`,
+      description: `Interactive sheet music transcription and playback.`,
+      image: `/placeholder.png`,
+      link: `/projects/music/beethoven-virus`
+    },
+    ...Array.from({ length: 4 }).map((_, i) => ({
+      id: i + 3,
+      title: `Music Project ${i + 3}`,
       date: `March 2026`,
       description: `A detailed description of the track, album, or performance goes here. Discussing the creative process, instruments used, and final production.`,
       image: `/placeholder.png`,
