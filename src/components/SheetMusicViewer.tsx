@@ -23,6 +23,9 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // ResizeObserver to keep cursor scaled when layout changes
+    let ro: ResizeObserver | null = null;
+
     // Initialize OSMD
     const osmdInstance = new OpenSheetMusicDisplay(containerRef.current, {
       autoResize: true,
@@ -35,9 +38,29 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
       drawPartAbbreviations: true,
       drawMeasureNumbers: true,
       drawMeasureNumbersOnlyAtSystemStart: true,
+      cursorsOptions: [{ type: 0, color: "#3b82f6", alpha: 0.5, size: 2.5 }]
     });
 
     setOsmd(osmdInstance);
+
+    // attach a ResizeObserver after we set the instance so we can rescale
+    ro = new ResizeObserver(() => {
+      try {
+        // scaleCursor will be a no-op until osmd exists
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        // (we call it safely in runtime)
+        (window as any).requestAnimationFrame(() => {
+          // call scaleCursor if present
+          // use a dynamic lookup to avoid TS ordering issues
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          if (typeof scaleCursor === 'function') scaleCursor();
+        });
+      } catch (e) {
+        // ignore
+      }
+    });
+    ro.observe(containerRef.current);
 
     return () => {
       // Cleanup
@@ -49,6 +72,7 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
       }
+      if (ro) ro.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -78,6 +102,14 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
       .then(async () => {
         if (cancelled) return;
         osmd.render();
+        osmd.cursor.show(); // Initialize the cursor element
+        // ensure cursor gets sized to the rendered staff
+        try {
+          scaleCursor();
+        } catch (e) {
+          // ignore — scaleCursor is best-effort
+        }
+        osmd.cursor.hide();
 
         // create a new player. the constructor takes an optional *AudioContext*
         // and an instrument player, not a plain options object. passing a
@@ -122,18 +154,37 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
     };
   }, [osmd, file]);
 
+  const scaleCursor = () => {
+    if (!osmd || !osmd.cursor) return;
+
+    // Simple Y-scaling: adjust this factor as needed
+    const factor = 175;
+    const cursorEl = osmd.cursor.cursorElement as HTMLImageElement;
+    cursorEl.style.transform = `scaleY(${factor})`;
+    cursorEl.style.transformOrigin = 'top left';
+    cursorEl.style.zIndex = String(osmd.cursor.wantedZIndex || 10);
+    cursorEl.style.opacity = '1';
+  };
+
   const togglePlay = () => {
-    if (!audioPlayer) return;
+    if (!audioPlayer || !osmd) return;
     if (isPlaying) {
       audioPlayer.pause();
     } else {
+      // Modify the library's internal wantedZIndex
+      osmd.cursor.wantedZIndex = 10;
+      osmd.cursor.cursorElement.style.zIndex = '10 !important';
+      scaleCursor();
+      osmd.cursor.show();
       audioPlayer.play();
     }
   };
 
   const stopPlay = () => {
-    if (!audioPlayer) return;
+    if (!audioPlayer || !osmd) return;
     audioPlayer.stop();
+    osmd.cursor.reset();
+    osmd.cursor.hide();
   };
 
   return (
