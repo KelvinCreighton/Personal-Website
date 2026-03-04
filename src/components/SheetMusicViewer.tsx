@@ -11,6 +11,10 @@ interface SheetMusicViewerProps {
 export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [osmd, setOsmd] = useState<OpenSheetMusicDisplay | null>(null);
+  // we keep a ref for the actual AudioPlayer instance so we can always
+  // access the "current" player without worrying about stale closures.
+  // the state is still used purely for rendering/UI updates (play/pause)
+  const audioPlayerRef = useRef<AudioPlayer | null>(null);
   const [audioPlayer, setAudioPlayer] = useState<AudioPlayer | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -37,8 +41,10 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
 
     return () => {
       // Cleanup
-      if (audioPlayer) {
-        audioPlayer.stop();
+      if (audioPlayerRef.current) {
+        // stop and drop the reference so we don't leak a context
+        audioPlayerRef.current.stop();
+        audioPlayerRef.current = null;
       }
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
@@ -47,19 +53,50 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // whenever the score (or the osmd instance) changes we need to recreate
+  // the audio player. we explicitly tear down the old player first in order
+  // to avoid the memory/time scheduling issues described in the issue
+  // comment above. the `audioPlayerRef` holds the real object; state is
+  // kept so that our UI responds to changes.
   useEffect(() => {
-    if (osmd && file) {
-      setLoading(true);
-      osmd.load(file).then(async () => {
+    if (!osmd || !file) return;
+
+    let cancelled = false;
+    setLoading(true);
+
+    // tear down any previous player immediately
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.stop();
+      audioPlayerRef.current = null;
+      setAudioPlayer(null);
+      setAudioReady(false);
+      setIsPlaying(false);
+    }
+
+    osmd
+      .load(file)
+      .then(async () => {
+        if (cancelled) return;
         osmd.render();
-        
-        // Initialize Audio Player after OSMD is rendered
+
+        // create a new player. the constructor takes an optional *AudioContext*
+        // and an instrument player, not a plain options object. passing a
+        // random object here was the cause of the `this.ac.suspend is not a
+        // function` error – the library attempted to call `suspend()` on the
+        // value you provided.
+        //
+        // if you need to tweak scheduling behaviour you can either create a
+        // custom AudioContext yourself and pass it as the first argument, or
+        // open an issue/PR against osmd-audio-player; there are no documented
+        // config knobs today.
         const player = new AudioPlayer();
+
+        audioPlayerRef.current = player;
         setAudioPlayer(player);
-        
+
         try {
           await player.loadScore(osmd);
-          setAudioReady(true);
+          if (!cancelled) setAudioReady(true);
         } catch (audioErr) {
           console.error("Audio Player failed to load score:", audioErr);
         }
@@ -68,12 +105,21 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
           setIsPlaying(state === "PLAYING");
         });
 
-        setLoading(false);
-      }).catch((err) => {
+        if (!cancelled) setLoading(false);
+      })
+      .catch((err) => {
+        if (cancelled) return;
         console.error("Error loading sheet music:", err);
         setLoading(false);
       });
-    }
+
+    return () => {
+      cancelled = true;
+      if (audioPlayerRef.current) {
+        audioPlayerRef.current.stop();
+        audioPlayerRef.current = null;
+      }
+    };
   }, [osmd, file]);
 
   const togglePlay = () => {
