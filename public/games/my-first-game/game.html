@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html>
+<head>
+<style>
+/* Prevent the arrow keys and spacebar from scrolling the page */
+body {
+  overflow-y: scroll;
+}
+</style>
+</head>
 <body>
 
 <p id="timer">&nbsp;</p>
@@ -8,7 +16,6 @@
 <br><br>
 <canvas id="myCanvas" width="512" height="256" style="border:3px solid #d3d3d3;">
 </center>
-
 
 <br>
 <p id="info"></p>
@@ -33,6 +40,14 @@
 <p id="wPress"></p>
 <p id="mPress"></p>
 
+<script>
+// Prevent default scrolling behavior for arrow keys and spacebar
+window.addEventListener("keydown", function(e) {
+    if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+}, false);
+</script>
 
 <script src="files/setup.js"></script>
 <script src="files/levels/level0.js"></script>
@@ -48,7 +63,6 @@
 <script src="files/timer.js"></script>
 <script src="files/help.js"></script>
 <script src="files/extra.js"></script>
-
 
 </body>
 </html>
