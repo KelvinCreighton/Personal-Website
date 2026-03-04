@@ -5,14 +5,22 @@ export default function GameDevProjects() {
   const projects = [
     {
       id: 1,
+      title: `Tank Game`,
+      date: `Early Days`,
+      description: `A top-down tank shooter game. Playable directly in your browser.`,
+      image: `/images/projects/tank-game.png`,
+      link: `/projects/game-dev/tank-game`
+    },
+    {
+      id: 2,
       title: `My First Game`,
       date: `2016`,
       description: `The first JavaScript game I ever made. Playable directly in your browser.`,
       image: `/images/projects/my-first-game.png`,
       link: `/projects/game-dev/my-first-game`
     },
-    ...Array.from({ length: 5 }).map((_, i) => ({
-      id: i + 2,
+    ...Array.from({ length: 4 }).map((_, i) => ({
+      id: i + 3,
       title: `Game Dev Project ${i + 2}`,
       date: `March 2026`,
       description: `A detailed description of the project goes here. Discussing what was accomplished, the tools used, and the final outcome of the work.`,
