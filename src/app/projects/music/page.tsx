@@ -7,7 +7,7 @@ export default function MusicProjects() {
       id: 1,
       title: `The Longest Moment Before a New Beginning`,
       date: `October 2019`,
-      description: `An original piano composition I wrote in highschool. View and play the interactive sheet music directly in the browser.`,
+      description: `An original piano composition I wrote in highschool.`,
       image: `/images/projects/The-Longest-Moment-Before-a-New-Beginning.png`,
       link: `/projects/music/the-longest-moment`
     },
@@ -16,7 +16,7 @@ export default function MusicProjects() {
       title: `Beethoven Virus`,
       date: `March 2026`,
       description: `Interactive sheet music transcription and playback.`,
-      image: `/placeholder.png`,
+      image: `/images/projects/Beethoven_Virus.png`,
       link: `/projects/music/beethoven-virus`
     },
     {
@@ -24,7 +24,7 @@ export default function MusicProjects() {
       title: `BL1ND JUST1C3 1NV3ST1G4T1ON`,
       date: `March 2026`,
       description: `Interactive sheet music transcription and playback.`,
-      image: `/placeholder.png`,
+      image: `/images/projects/BL1ND_JUST1C3_1NV3ST1G4T1ON.png`,
       link: `/projects/music/blind-justice-investigation`
     },
     ...Array.from({ length: 3 }).map((_, i) => ({
