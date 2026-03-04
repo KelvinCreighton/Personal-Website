@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function SoftwareProjects() {
+export default function GameDevProjects() {
   // 6 Placeholders
   const projects = Array.from({ length: 6 }).map((_, i) => ({
     id: i + 1,
-    title: `Software Project ${i + 1}`,
+    title: `Game Dev Project ${i + 1}`,
     date: `March 2026`,
     description: `A detailed description of the project goes here. Discussing what was accomplished, the tools used, and the final outcome of the work.`,
     image: `/placeholder.png` // Using a generic placeholder image path
@@ -17,9 +17,9 @@ export default function SoftwareProjects() {
         <Link href="/projects" className="text-sm text-gray-500 hover:underline self-start mb-4">
           &larr; Back to Categories
         </Link>
-        <h1 className="text-4xl font-bold">Software Development</h1>
+        <h1 className="text-4xl font-bold">Game Development</h1>
         <p className="mt-4 text-gray-600 dark:text-gray-400 text-center">
-          Showcasing web development, applications, and architecture projects.
+          Showcasing interactive experiences, mechanics, and games.
         </p>
       </div>
       

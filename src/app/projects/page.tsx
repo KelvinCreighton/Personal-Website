@@ -23,12 +23,12 @@ export default function Projects() {
           <h2 className="text-xl font-semibold text-center">Cybersecurity</h2>
         </Link>
 
-        {/* Category 3: Software Engineering */}  
-        <Link href="/projects/software" className="group flex flex-col items-center justify-center p-8 border rounded-xl hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors">
+        {/* Category 3: Game Development */}  
+        <Link href="/projects/game-dev" className="group flex flex-col items-center justify-center p-8 border rounded-xl hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors">
           <div className="mb-4 group-hover:scale-110 transition-transform dark:invert">
-            <Image src="/icons/software.svg" alt="Software Engineering" width={128} height={128} />
+            <Image src="/icons/game-dev.svg" alt="Game Development" width={128} height={128} />
           </div>
-          <h2 className="text-xl font-semibold text-center">Software</h2>
+          <h2 className="text-xl font-semibold text-center">Game Dev</h2>
         </Link>
 
         {/* Category 4: Music Production */}  
