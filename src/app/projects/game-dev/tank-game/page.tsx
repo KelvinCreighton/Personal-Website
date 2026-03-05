@@ -9,7 +9,7 @@ export default function TankGamePage() {
         </Link>
         <h1 className="text-4xl font-bold text-center">Tank Game</h1>
         <p className="mt-4 text-gray-600 dark:text-gray-400 text-center">
-          A top-down tank shooter inspired by the classic Tank Trouble game!
+          A topdown tank shooter inspired by the classic Tank Trouble game!
         </p>
       </div>
       

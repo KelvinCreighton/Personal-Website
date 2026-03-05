@@ -38,7 +38,7 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
       drawPartAbbreviations: true,
       drawMeasureNumbers: true,
       drawMeasureNumbersOnlyAtSystemStart: true,
-      cursorsOptions: [{ type: 0, color: "#3b82f6", alpha: 0.5, size: 2.5 }]
+      cursorsOptions: [{ type: 0, color: "#3b82f6", alpha: 0.5, follow: true }]
     });
 
     setOsmd(osmdInstance);

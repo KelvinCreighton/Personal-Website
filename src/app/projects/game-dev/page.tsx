@@ -23,7 +23,7 @@ export default function GameDevProjects() {
       id: 2,
       title: `Tank Game`,
       date: `2018`,
-      description: `A top-down tank shooter inspired by the classic Tank Trouble game!`,
+      description: `A topdown tank shooter inspired by the classic Tank Trouble game!`,
       image: `/images/projects/tank-game.png`,
       link: `/projects/game-dev/tank-game`
     },
