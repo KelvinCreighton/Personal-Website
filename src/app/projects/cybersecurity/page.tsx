@@ -2,14 +2,32 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CybersecurityProjects() {
-  // 6 Placeholders
-  const projects = Array.from({ length: 6 }).map((_, i) => ({
-    id: i + 1,
-    title: `Cybersecurity Project ${i + 1}`,
-    date: `March 2026`,
-    description: `A detailed description of the project goes here. Discussing what was accomplished, the tools used, and the final outcome of the work.`,
-    image: `/placeholder.png` // Using a generic placeholder image path
-  }));
+  const projects = [
+    {
+      id: 'nosql-injection',
+      title: 'PicoCTF: NoSQL Injection',
+      date: '2024',
+      description: 'A write-up on exploiting a NoSQL injection vulnerability in a MongoDB-backed Express application to bypass authentication.',
+      image: '/placeholder.png',
+      link: '/cybersecurity/nosql-injection/index.html'
+    },
+    {
+      id: 'soap',
+      title: 'PicoCTF: SOAP',
+      date: '2024',
+      description: 'A write-up on exploiting an XML External Entity (XXE) vulnerability through a SOAP endpoint to perform Local File Inclusion.',
+      image: '/placeholder.png',
+      link: '/cybersecurity/soap/index.html'
+    },
+    {
+      id: 'ssti1',
+      title: 'PicoCTF: SSTI1',
+      date: '2024',
+      description: 'A walkthrough of a Server-Side Template Injection in Jinja2, escaping the sandbox to achieve Remote Code Execution.',
+      image: '/placeholder.png',
+      link: '/cybersecurity/ssti1/index.html'
+    }
+  ];
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
@@ -25,9 +43,8 @@ export default function CybersecurityProjects() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl">
         {projects.map((project) => (
-          <div key={project.id} className="group flex flex-col rounded-xl bg-gray-50 dark:bg-gray-900 overflow-hidden hover:shadow-lg transition-all duration-300">
+          <Link href={project.link} key={project.id} className="group flex flex-col rounded-xl bg-gray-50 dark:bg-gray-900 overflow-hidden hover:shadow-lg transition-all duration-300">
             <div className="w-full aspect-video relative bg-gray-200 dark:bg-gray-800">
-              {/* Using a solid background as a fallback until actual PNGs are provided */}
               <div className="absolute inset-0 flex items-center justify-center text-gray-400">
                 [Image: {project.id}.png]
               </div>
@@ -43,7 +60,7 @@ export default function CybersecurityProjects() {
                 {project.description}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </main>
