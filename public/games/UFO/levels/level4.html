@@ -1,0 +1,557 @@
+function level4() {	
+	//boxes
+	boxes.push({	//red ground
+		x: cWidth / 2 + 100,
+		y: cHeight / 2 + 200,
+		z: 0,
+		w: 5500,
+		h: 300,
+		l: 0,
+		c: "#ff0000"
+	});
+	boxes.push({	//blue ground
+		x: cWidth / 2 - 400,
+		y: cHeight / 2 + player.size * 3,
+		z: 0,
+		w: 500 + 1,
+		h: 500,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//blue top
+		x: cWidth / 2 - 400,
+		y: cHeight / 2 - 900,
+		z: 0,
+		w: 6000,
+		h: 500,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//blue right end wall
+		x: cWidth / 2 + 5350 - 1,
+		y: cHeight / 2 - 1000,
+		z: 0,
+		w: 500,
+		h: 2000,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//left wall
+		x: cWidth / 2 - 900,
+		y: cHeight / 2 - 1000,
+		z: 0,
+		w: 500 + 1,
+		h: 2000,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//1
+		x: cWidth / 2 + 175,
+		y: cHeight / 2,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//2
+		x: cWidth / 2 + 335,
+		y: cHeight / 2 + 100,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//3
+		x: cWidth / 2 + 370,
+		y: cHeight / 2 + 100,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB",
+		move: "right",
+		xs: 1,				//block movement speed
+		xd: 0,				//changeable block movement distance
+		xdMax: 100			//unchangeable block movement distance
+	});
+	boxes.push({	//4
+		x: cWidth / 2 + 505,
+		y: cHeight / 2 + 50,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//4
+		x: cWidth / 2 + 550,
+		y: cHeight / 2,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//5
+		x: cWidth / 2 + 600,
+		y: cHeight / 2,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB",
+		move: "up",
+		ys: 1,
+		yd: 0,
+		ydMax: 200
+	});
+	boxes.push({	//6
+		x: cWidth / 2 + 650,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//7
+		x: cWidth / 2 + 750,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//8
+		x: cWidth / 2 + 850,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//9
+		x: cWidth / 2 + 880,
+		y: cHeight / 2 - 230,
+		z: 0,
+		w: 30,
+		h: 60,
+		l: 0,
+		c: "#ff0000"
+	});
+	boxes.push({	//10	with checkpoint
+		x: cWidth / 2 + 910,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 150,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//11
+		x: cWidth / 2 + 1200,
+		y: cHeight / 2 - 25,
+		z: 0,
+		w: 60,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//wall of 11
+		x: cWidth / 2 + 1230,
+		y: cHeight / 2 - 1000,
+		z: 0,
+		w: 30,
+		h: 1005,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//12
+		x: cWidth / 2 + 1100,
+		y: cHeight / 2 + 150,
+		z: 0,
+		w: 120,
+		h: 30,
+		l: 0,
+		c: "#0021CB",
+		move: "right",
+		xs: 1,
+		xd: 0,
+		xdMax: 100
+	});
+	boxes.push({	//13
+		x: cWidth / 2 + 1350,
+		y: cHeight / 2 + 100,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//14
+		x: cWidth / 2 + 1400,
+		y: cHeight / 2 + 50,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//15
+		x: cWidth / 2 + 1450,
+		y: cHeight / 2,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//16
+		x: cWidth / 2 + 1400,
+		y: cHeight / 2 - 50,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//17
+		x: cWidth / 2 + 1350,
+		y: cHeight / 2 - 100,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//18
+		x: cWidth / 2 + 1400,
+		y: cHeight / 2 - 150,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//19
+		x: cWidth / 2 + 1450,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//20
+		x: cWidth / 2 + 1725,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//21
+		x: cWidth / 2 + 2000,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//22 	with checkpoint
+		x: cWidth / 2 + 2275,
+		y: cHeight / 2 - 200,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//23
+		x: cWidth / 2 + 2600,
+		y: cHeight / 2 - 50,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//24
+		x: cWidth / 2 + 2725,
+		y: cHeight / 2 + 100,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//25
+		x: cWidth / 2 + 2800,
+		y: cHeight / 2 + 170,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//26	top
+		x: cWidth / 2 + 2830,
+		y: cHeight / 2 - 400 - 1,
+		z: 0,
+		w: 560,
+		h: 540,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//27
+		x: cWidth / 2 + 3010,
+		y: cHeight / 2 + 170,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//28
+		x: cWidth / 2 + 3220,
+		y: cHeight / 2 + 170,
+		z: 0,
+		w: 260,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//29	wall
+		x: cWidth / 2 + 3480,
+		y: cHeight / 2 - 250,
+		z: 0,
+		w: 30,
+		h: 450,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//30	wall2
+		x: cWidth / 2 + 3590,
+		y: cHeight / 2 - 400 - 1,
+		z: 0,
+		w: 30,
+		h: 500,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({	//31
+		x: cWidth / 2 + 3510,
+		y: cHeight / 2 + 170,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#00ff00"
+	});
+	boxes.push({	//32	moving red bottom
+		x: cWidth / 2 + 3710,
+		y: cHeight / 2 + 170,
+		z: 0,
+		w: 500,
+		h: 1000,
+		l: 0,
+		c: "#ff0000",
+		move: "up",
+		ys: 1,
+		yd: 0,
+		ydMax: 300
+	});
+	boxes.push({	//32	moving red top
+		x: cWidth / 2 + 3710,
+		y: cHeight / 2 - 1000,
+		z: 0,
+		w: 500,
+		h: 900,
+		l: 0,
+		c: "#ff0000",
+		move: "up",
+		ys: 1,
+		yd: 0,
+		ydMax: 300
+	});
+	boxes.push({	//33	moving red bottom 2
+		x: cWidth / 2 + 4300,
+		y: cHeight / 2 - 100,
+		z: 0,
+		w: 500,
+		h: 1000,
+		l: 0,
+		c: "#ff0000",
+		move: "down",
+		ys: 1,
+		yd: 0,
+		ydMax: 300
+	});
+	boxes.push({	//33	moving red top 2
+		x: cWidth / 2 + 4300,
+		y: cHeight / 2 - 1270,
+		z: 0,
+		w: 500,
+		h: 900,
+		l: 0,
+		c: "#ff0000",
+		move: "down",
+		ys: 1,
+		yd: 0,
+		ydMax: 300
+	});
+	boxes.push({	//34	with checkpoint
+		x: cWidth / 2 + 5000,
+		y: cHeight / 2,
+		z: 0,
+		w: 200,
+		h: 30,
+		l: 0,
+		c: "#00ff00"
+	});
+	
+	//enemies
+	enemy.push({		//enemy chasing you throughout the level
+		x: cWidth / 2 - 900,
+		y: cHeight / 2,
+		z: 0,
+		r: 500,
+		speed: 1,
+		direction: "right",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: true,
+		extra: "chase"
+	});
+	enemy.push({
+		x: cWidth / 2 + 3350,
+		y: cHeight / 2 + 160 - 1,
+		z: 0,
+		r: 10,
+		speed: 0.75,
+		direction: "right",
+		type: "move",
+		fall: false,
+		ball: false,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 + 3100,
+		y: cHeight / 2 + 160 - 1,
+		z: 0,
+		r: 10,
+		speed: 0.75,
+		direction: "right",
+		type: "move",
+		fall: false,
+		ball: false,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 + 1500,
+		y: cHeight / 2 - 221,
+		z: 0,
+		r: 20,
+		speed: 0.5,
+		direction: "right",
+		type: "move",
+		fall: false,
+		ball: false,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 + 1800,
+		y: cHeight / 2 - 221,
+		z: 0,
+		r: 20,
+		speed: 0.75,
+		direction: "left",
+		type: "move",
+		fall: false,
+		ball: false,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 + 2100,
+		y: cHeight / 2 - 221,
+		z: 0,
+		r: 20,
+		speed: 1,
+		direction: "right",
+		type: "move",
+		fall: false,
+		ball: false,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 + 2375 - 200 / 3,
+		y: cHeight / 2 - 221,
+		z: 0,
+		r: 10,
+		speed: 4,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 + 2375 + 200 / 3,
+		y: cHeight / 2 - 221,
+		z: 0,
+		r: 10,
+		speed: 4,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	
+	//checkpoints
+	checkpoints.push({
+		x: cWidth / 2 + 1000,
+		y: cHeight / 2 - 230,
+		z: 0,
+		r: 20,
+		id: 1
+	});
+	checkpoints.push({
+		x: cWidth / 2 + 2375,
+		y: cHeight / 2 - 230,
+		z: 0,
+		r: 20,
+		id: 2
+	});
+	
+	//arrows
+	arrows.push({
+		x: cWidth / 2,
+		y: cHeight / 2 - 50,
+		size: 20,
+		c: "#00ff00"
+	});
+	
+	//hints
+	hints.push({
+		x: cWidth / 2 + 60,
+		y: cHeight / 2 + 20,
+		z: 0,
+		radius: 30,
+		id: 7
+	});
+	
+	
+	//goal
+	goal.x = cWidth / 2 + 5100;
+	goal.y = cHeight / 2 - 25;
+	goal.z = 0;
+	goal.r = 20;
+}

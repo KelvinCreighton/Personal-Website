@@ -1,0 +1,233 @@
+function level3() {	
+	//boxes
+	boxes.push({
+		x: cWidth / 2 - 400,
+		y: cHeight / 2 + player.size * 3,
+		z: 0,
+		w: 150,
+		h: 300,
+		l: 0,
+		c: "#00ff00"	//green
+	});
+	boxes.push({	//red bottom
+		x: cWidth / 2 - 1000,
+		y: cHeight,
+		z: 0,
+		w: 1000,
+		h: 120,
+		l: 0,
+		c: "#ff0000"	//red
+	});
+	boxes.push({
+		x: cWidth / 2 - 50,
+		y: cHeight / 2 + player.size * 3,
+		z: 0,
+		w: 100 + 1,
+		h: 300,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//right wall
+		x: cWidth / 2 + 50,
+		y: cHeight - 500,
+		z: 0,
+		w: 500,
+		h: 1620,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//green bottom
+		x: cWidth / 2 - 2000,
+		y: cHeight + 250,
+		z: 0,
+		w: 1100,
+		h: 100,
+		l: 0,
+		c: "#00ff00"	//green
+	});
+	boxes.push({	//blue bottom
+		x: cWidth / 2 - 1500,
+		y: cHeight + 300,
+		z: 0,
+		w: 1600,
+		h: 500,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({		//blue bottom 2
+		x: cWidth / 2 - 700,
+		y: cHeight + 250,
+		z: 0,
+		w: 200,
+		h: 500,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//left wall
+		x: cWidth / 2 - 2000,
+		y: cHeight - 500,
+		z: 0,
+		w: 750,
+		h: 1000,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//top
+		x: cWidth / 2 - 2000,
+		y: cHeight - 1000,
+		z: 0,
+		w: 2500,
+		h: 600,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	
+	//enemies
+	enemy.push({
+		x: cWidth / 2 - 390,
+		y: cHeight / 2 + 10,
+		z: 0,
+		r: 20,
+		speed: 1,
+		direction: "left",
+		type: "still",
+		fall: false,
+		ball: false,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 650,
+		y: cHeight / 2 + 190,
+		z: 0,
+		r: 20,
+		speed: 4,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 800,
+		y: cHeight / 2 - 170,
+		z: 0,
+		r: 20,
+		speed: 4,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 950,
+		y: cHeight / 2 + 190,
+		z: 0,
+		r: 20,
+		speed: 4,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 1130,
+		y: cHeight / 2 + 270,
+		z: 0,
+		r: 20,
+		speed: 2,
+		direction: "left",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 850,
+		y: cHeight / 2 + 490,
+		z: 0,
+		r: 20,
+		speed: 2,
+		direction: "left",
+		type: "move",
+		fall: false,
+		ball: false,
+		noClip: false
+	});
+	enemy.push({		//the randomness makes it more fun
+		x: cWidth / 2 - 450,
+		y: cHeight / 2 + Math.floor(Math.random() * 50) + 450,
+		z: 0,
+		r: 10,
+		speed: Math.floor(Math.random() * 4) + 1,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 350,
+		y: cHeight / 2 + Math.floor(Math.random() * 50) + 450,
+		z: 0,
+		r: 10,
+		speed: Math.floor(Math.random() * 4) + 1,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 250,
+		y: cHeight / 2 + Math.floor(Math.random() * 50) + 450,
+		z: 0,
+		r: 10,
+		speed: Math.floor(Math.random() * 4) + 1,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 150,
+		y: cHeight / 2 + Math.floor(Math.random() * 50) + 450,
+		z: 0,
+		r: 10,
+		speed: Math.floor(Math.random() * 4) + 1,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	enemy.push({
+		x: cWidth / 2 - 50,
+		y: cHeight / 2 + Math.floor(Math.random() * 50) + 450,
+		z: 0,
+		r: 10,
+		speed: Math.floor(Math.random() * 4) + 1,
+		direction: "up",
+		type: "move",
+		fall: false,
+		ball: true,
+		noClip: false
+	});
+	
+	//hints
+	hints.push({
+		x: cWidth / 2 - 325,
+		y: cHeight / 2 + 15,
+		z: 0,
+		radius: 30,
+		id: 6
+	});
+	
+	//goal
+	goal.x = cWidth / 2;
+	goal.y = cHeight / 2 + 380;
+	goal.z = 0;
+	goal.r = 20;
+}

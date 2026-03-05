@@ -1,0 +1,64 @@
+function level5() {	
+	//boxes
+	boxes.push({
+		x: cWidth / 2,
+		y: cHeight / 2 + 200,
+		z: 0,
+		w: 500,
+		h: 500,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({
+		x: cWidth / 2 - 400,
+		y: cHeight / 2 + player.size * 3,
+		z: 0,
+		w: 500,
+		h: 500,
+		l: 0,
+		c: "#0021CB"
+	});
+	boxes.push({
+		x: cWidth / 2 - 50,
+		y: cHeight / 2 - 10,
+		z: 0,
+		w: 30,
+		h: 30,
+		l: 0,
+		c: "#0021CB"
+	});
+	
+	//moveBoxes
+	moveBoxes.push({
+		x: cWidth / 2 + 50,
+		y: cHeight / 2,
+		z: 0,
+		size: 30,
+		c: "#a1a100",
+		g: 0,
+		gAcc: 0.
+	});
+	moveBoxes.push({
+		x: cWidth / 2 - 150,
+		y: cHeight / 2,
+		z: 0,
+		size: 30,
+		c: "#a1a100",
+		g: 0,
+		gAcc: 0.
+	});
+	
+	//enemies
+	
+	//checkpoints
+	
+	//hints
+	
+	//arrows
+	
+	//goal
+	goal.x = cWidth / 2;
+	goal.y = cHeight / 2 - 100;
+	goal.z = 0;
+	goal.r = 20;
+}

@@ -1,0 +1,144 @@
+function level2() {	
+	//boxes
+	boxes.push({
+		x: cWidth / 2 - 50,
+		y: cHeight / 2 + player.size * 3,
+		z: 0,
+		w: 150 + 1,
+		h: 300,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({
+		x: cWidth / 2 + player.size * 2,
+		y: cHeight / 2 + 15,
+		z: 0,
+		w: 100,
+		h: 50,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({
+		x: cWidth / 2 - 60,
+		y: cHeight / 2 - 35,
+		z: 0,
+		w: 100,
+		h: 15,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({
+		x: cWidth / 2 + 10,
+		y: cHeight / 2 - 85,
+		z: 0,
+		w: 100,
+		h: 15,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({
+		x: cWidth / 2 - 60,
+		y: cHeight / 2 - 185,
+		z: 0,
+		w: 100,
+		h: 15,
+		l: 0,
+		c: "#00ff00"	//green
+	});
+	boxes.push({
+		x: cWidth / 2 + 10,
+		y: cHeight / 2 - 235,
+		z: 0,
+		w: 100,
+		h: 15,
+		l: 0,
+		c: "#00ff00"	//green
+	});
+	boxes.push({
+		x: cWidth / 2 - 80,
+		y: cHeight / 2 - 350,
+		z: 0,
+		w: 100,
+		h: 15,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({
+		x: cWidth / 2 + 30,
+		y: cHeight / 2 - 550,
+		z: 0,
+		w: 100,
+		h: 15,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({
+		x: cWidth / 2 - 80,
+		y: cHeight / 2 - 750,
+		z: 0,
+		w: 100,
+		h: 15,
+		l: 0,
+		c: "#00ff00"	//green
+	});
+	boxes.push({		//bottom red
+		x: -600,
+		y: cHeight / 2 - 800,
+		z: 0,
+		w: cWidth / 2 + 550 + 1,
+		h: 100,
+		l: 0,
+		c: "#ff0000"	//red
+	});
+	boxes.push({	//top red
+		x: -600,
+		y: cHeight / 2 - 2050,
+		z: 0,
+		w: cWidth / 2 + 700 + 1,
+		h: 1050,
+		l: 0,
+		c: "#ff0000"	//red
+	});
+	boxes.push({	//left wall red
+		x: -600,
+		y: cHeight / 2 - 1500,
+		z: 0,
+		w: cWidth / 2,
+		h: 850,
+		l: 0,
+		c: "#ff0000"	//red
+	});
+	boxes.push({	//first left wall
+		x: -600,
+		y: cHeight / 2 - 750,
+		z: 0,
+		w: cWidth / 2 + 550 + 1,
+		h: 1000,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	boxes.push({	//first right wall
+		x: cWidth / 2 + 100,
+		y: cHeight / 2 - 1750,
+		z: 0,
+		w: cWidth / 2 + 50 + 1,
+		h: 2000,
+		l: 0,
+		c: "#0021CB"	//blue
+	});
+	
+	//hints
+	hints.push({
+		x: cWidth / 2 + 70,
+		y: cHeight / 2 - 100,
+		z: 0,
+		radius: 30,
+		id: 5
+	});
+	
+	//goal
+	goal.x = cWidth / 2 - 500;
+	goal.y = cHeight / 2 - 900;
+	goal.z = 0;
+	goal.r = 20;
+}

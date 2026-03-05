@@ -4,29 +4,29 @@ import Link from 'next/link';
 export default function GameDevProjects() {
   const projects = [
     {
-      id: 1,
+      id: 0,
       title: `Tank Game`,
-      date: `Early Days`,
-      description: `A top-down tank shooter game. Playable directly in your browser.`,
+      date: `2018`,
+      description: `A top-down tank shooter game built with JavaScript and HTML5 Canvas.`,
       image: `/images/projects/tank-game.png`,
       link: `/projects/game-dev/tank-game`
     },
     {
+      id: 1,
+      title: `UFO`,
+      date: `2017`,
+      description: `A fun UFO game project. Players control a UFO and navigate through various levels, avoiding enemies. `,
+      image: `/images/projects/ufo.png`,
+      link: `/projects/game-dev/ufo`
+    },
+    {
       id: 2,
       title: `My First Game`,
-      date: `2016`,
-      description: `The first JavaScript game I ever made. Playable directly in your browser.`,
+      date: `2017`,
+      description: `The first JavaScript game I ever made. It was a simple platformer where the player had to navigate through levels and avoid obstacles. This project was a great learning experience and sparked my passion for game development.`,
       image: `/images/projects/my-first-game.png`,
       link: `/projects/game-dev/my-first-game`
-    },
-    ...Array.from({ length: 4 }).map((_, i) => ({
-      id: i + 3,
-      title: `Game Dev Project ${i + 2}`,
-      date: `March 2026`,
-      description: `A detailed description of the project goes here. Discussing what was accomplished, the tools used, and the final outcome of the work.`,
-      image: `/placeholder.png`,
-      link: `#`
-    }))
+    }
   ];
 
   return (

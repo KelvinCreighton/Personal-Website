@@ -23,6 +23,11 @@ body {
   background-color: #a8a8a8;
 }
 
+/* Firefox scrollbar styling */
+* {
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
 /* Media query to adapt the scrollbar for dark mode */
 @media (prefers-color-scheme: dark) {
   ::-webkit-scrollbar {
@@ -36,6 +41,11 @@ body {
 
   ::-webkit-scrollbar-thumb:hover {
     background-color: #9ca3af; /* Even lighter gray when hovered in dark mode */
+  }
+
+  /* Firefox dark mode scrollbar */
+  * {
+    scrollbar-color: #6b7280 #2d3748;
   }
 }
 </style>

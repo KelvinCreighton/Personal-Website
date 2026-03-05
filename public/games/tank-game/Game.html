@@ -1,0 +1,38 @@
+<html>
+<head>
+<style>
+/* Prevent the arrow keys and spacebar from scrolling the page */
+body {
+  overflow-y: auto; /* Allow the browser to decide when to show the scrollbar */
+}
+</style>
+<script language="javascript" type="text/javascript" src="files/libraries/p5.js"></script>
+<script language="javascript" type="text/javascript" src="files/libraries/p5.collide2d.js"></script>
+<script language="javascript" type="text/javascript" src="files/libraries/p5.dom.js"></script>
+
+<script language="javascript" type="text/javascript" src="files/main.js"></script>
+<script language="javascript" type="text/javascript" src="files/maps.js"></script>
+<script language="javascript" type="text/javascript" src="files/players.js"></script>
+<script language="javascript" type="text/javascript" src="files/rects.js"></script>
+<script language="javascript" type="text/javascript" src="files/bullets.js"></script>
+<script language="javascript" type="text/javascript" src="files/upgrades.js"></script>
+</head>
+
+<body>
+<br><br><br>
+<p id="player1">&nbsp;</p>
+<center>
+	<div id="canvas-holder"></div>
+</center>
+
+<script>
+// Prevent default scrolling behavior for arrow keys and spacebar
+window.addEventListener("keydown", function(e) {
+    if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+}, false);
+</script>
+
+</body>
+</html>

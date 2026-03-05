@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html>
+<body>
+  
+<center>
+<canvas id="myCanvas" width="600" height="420" style="border:3px solid #d3d3d3;"></canvas>
+<p id="display1">&nbsp;</p>
+<p id="display2">&nbsp;</p>
+</center>
+
+<script>
+//canvas vars
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+var cWidth = canvas.width;
+var cHeight = canvas.height;
+
+var gameTimer = 0;
+var gameTimerOn = false;
+
+var screen = {
+		x: 0,
+		y: 0,
+		z: 0,
+	};
+	
+
+var rotation = 0;
+var deg = -Math.PI / 180;	//radians to degrees
+	
+var unlockedZ = false;
+	
+
+var start = true;
+var pause = false;
+var dead = false;
+var autoRespawn = false;
+var startOptions = "Play";
+var level = 0;
+var checkpoint = 0;
+
+var textDisplay = 0;
+var textTime;	
+var fade = 0;
+	
+var boxes = [];
+var moveBoxes = [];
+var hints = [];
+var arrows = [];
+var checkpoints = [];
+
+var goal = {
+	x: 0,
+	y: 0,
+	z: 0,
+	r: 0
+}
+
+var player = {
+		x: cWidth / 2,		//default
+		y: cHeight / 2, 	//default
+		xs1: 0,				//changeable x speed 1
+		xs2: 0,				//changeable x speed 2
+		speed: 2,
+		jumpHeight: 0,		//changeable jump height
+		maxJumpHeight: -5,	//non changeable jump height
+		size: 10,
+		ufo: false,
+		ufoTimer: 0,
+		onGround: false,
+		jumping: false,
+		g: 0,
+		gAcc: 0.2
+	};
+	
+var enemy = [];
+
+var noClip = false;
+var noClipSpeed = 0;	//changeable noClip speed
+var noClipSpeedMax = 10;	//non changeable noClip speed
+
+var button = {
+		w: false,
+		s: false,
+		d: false,
+		a: false,
+		q: false,
+		t: false,
+		x: false,
+		r: false,
+		f: false,
+		space: false,
+		spaceTimer: 0,
+		ctrl: false,
+		shft: false,
+		esc: false,
+		escTimer: 0,
+		up: false,
+		down: false,
+		left: false,
+		right: false
+	};
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+	if(e.which == 65) {
+		button.a = true;
+	}
+	if(e.which == 87) {
+		button.w = true;
+	}
+	if(e.which == 68) {
+		button.d = true;
+	}
+	if(e.which == 83) {
+		button.s = true;
+	}
+	if(e.which == 32) {
+		button.space = true;
+	}
+	if(e.which == 81) {
+		button.q = true;
+	}
+	if(e.which == 84) {
+		button.t = true;
+	}
+	if(e.which == 88) {
+		button.x = true;
+	}
+	if(e.which == 82) {
+		button.r = true;
+	}
+	if(e.which == 70) {
+		button.f = true;
+	}
+	if(e.which == 17) {
+		button.ctrl = true;
+	}
+	if(e.which == 16) {
+		button.shft = true;
+	}
+	if(e.which == 27) {
+		button.esc = true;
+	}
+	if(e.which == 38) {
+		button.up = true;
+	}
+	if(e.which == 40) {
+		button.down = true;
+	}
+	if(e.which == 37) {
+		button.left = true;
+	}
+	if(e.which == 39) {
+		button.right = true;
+	}
+}
+
+function keyUpHandler(e) {
+	if(e.which == 65) {
+		button.a = false;
+	}
+	if(e.which == 87) {
+		button.w = false;
+	}
+	if(e.which == 68) {
+		button.d = false;
+	}
+	if(e.which == 83) {
+		button.s = false;
+	}
+	if(e.which == 32) {
+		button.space = false;
+	}
+	if(e.which == 81) {
+		button.q = false;
+	}
+	if(e.which == 84) {
+		button.t = false;
+	}
+	if(e.which == 88) {
+		button.x = false;
+	}
+	if(e.which == 82) {
+		button.r = false;
+	}
+	if(e.which == 70) {
+		button.f = false;
+	}
+	if(e.which == 17) {
+		button.ctrl = false;
+	}
+	if(e.which == 16) {
+		button.shft = false;
+	}
+	if(e.which == 27) {
+		button.esc = false;
+	}
+	if(e.which == 38) {
+		button.up = false;
+	}
+	if(e.which == 40) {
+		button.down = false;
+	}
+	if(e.which == 37) {
+		button.left = false;
+	}
+	if(e.which == 39) {
+		button.right = false;
+	}
+}
+
+//mouse functions
+ctx.canvas.addEventListener("mousemove", mouseCoors);
+document.addEventListener("click", mouseClick);
+
+var mouseX, mouseY;
+function mouseCoors(e) {	
+	//mouse coors
+	mouseX = e.clientX - document.getElementById("myCanvas").offsetLeft;
+	mouseY = e.clientY - document.getElementById("myCanvas").offsetTop;	
+}
+var mClick = false;
+function mouseClick() {
+	mClick = true;
+}
+
+
+var fadeIn = 1 * 100, hold = 1/1.5 * 100, fadeOut = 1 * 100;
+function fadeText(id) {
+	if(pause == false) {
+		//fade in, hold, fade out, seconds(1, 1, 1)
+		textTime++
+		if(textTime >= 0 && textTime <= fadeIn)
+			fade += 0.01;
+		if(textTime >= fadeIn && textTime <= fadeIn + hold) 
+			fade = 1;
+		if(textTime >= fadeIn + hold && textTime <= fadeIn + hold + fadeOut)
+			fade -= 0.01;
+			
+		if(textTime >= fadeIn + hold + fadeOut) {
+			textDisplay = 0;
+			textTime = undefined;
+		}
+	}
+	
+	//drawing text
+	ctx.beginPath();
+	ctx.textAlign="center";
+	ctx.font="20px Georgia";
+	ctx.fillStyle='rgba(0, 0, 0, ' + fade + ')';
+	
+	if(id == 1) 
+		ctx.fillText('Press "T" near a "!" for a Tip', cWidth / 2, cHeight / 2 - player.size * 2);
+	if(id == 2)
+		ctx.fillText('Press "A" and "D" to move, and "W" to jump', cWidth / 2, cHeight / 2 - player.size * 2);
+	if(id == 3)
+		ctx.fillText('Press "Space" to Fly', cWidth / 2, cHeight / 2 - player.size * 2);
+	if(id == 4)
+		ctx.fillText('You can only land on Green Platforms', cWidth / 2, cHeight / 2 - player.size * 2);
+	if(id == 5) {
+		ctx.fillText("You can't touch ", cWidth / 2, cHeight / 2 - player.size * 4);
+		ctx.fillText("Blue walls when Flying", cWidth / 2, cHeight / 2 - player.size * 2);
+	}
+	if(id == 6)
+		ctx.fillText('You can kill Enemies from behind', cWidth / 2, cHeight / 2 - player.size * 2);
+	if(id == 7)
+		ctx.fillText("Don't fly for this part.      Also RUN!!", cWidth / 2, cHeight / 2 - player.size * 2);
+
+}
+
+function main() {
+	//clear canvas and extras
+	ctx.clearRect(0, 0, cWidth, cHeight);
+	
+	document.getElementById("display1").innerHTML = "X: " + Math.round(-screen.x) + "&emsp; | &emsp;" + "Y: " + Math.round(screen.y) + "&emsp; | &emsp;" + "Z: " + Math.round(screen.z);
+	document.getElementById("display2").innerHTML = "Level: " + level + "&emsp; | &emsp;" + "Checkpoint: " + checkpoint + "&emsp; | &emsp;" + "Rotation: " + Math.round(rotation); 
+	if(gameTimerOn == true) {
+		gameTimer++
+		if(gameTimer >= 30000)	//5 minutes
+			window.close();
+		if(button.w || button.a || button.s || button.d || button.q || button.t || button.x || button.r || button.space || button.esc || button.up || button.down || button.left || button.right || button.shft || button.ctrl || mClick)
+			gameTimer = 0;
+	}
+	
+	
+	
+	
+	//"#ff0000"(red) kills player, "#00ff00"(green) is safe, "#0021CB"(blue) kills player if player.ufo == true, "#a1a100"(yellow(same colour as goal)) is a movable block(button, lever, player moving it, etc.)
+	if(level == 0) {
+		screen.x = 0;
+		screen.y = 0;
+		screen.z = 0;
+		checkpoint = 0;
+		mainMenu();
+	}
+		
+	if(level > 0) {
+		drawBoxes();
+		drawMoveBoxes();
+		drawHints();
+		drawCheckpoints();
+		drawArrows();
+		drawEnemy();
+		drawGoal();
+		drawPlayer();
+		
+		if(pause == false) {
+			enemyMechanics();
+			
+			if(noClip == false) {
+				boxCollision();
+				moveBoxMechanics();
+				mechanics();
+			} else if(noClip == true) {
+				noClipMechanics();
+				player.jumping = 0;
+				player.g = 0;
+			}
+		}
+		if(button.esc == true && button.escTimer == 0 && dead == false) {
+			pause = !pause;
+			button.escTimer = 25;	//1/4 second delay to prevent spam
+			button.esc = false;
+		}
+		if(button.escTimer > 0)
+			button.escTimer--
+	}
+		
+		
+	if(dead == true && pause == false) {
+		player.ufoTimer = 30;
+		
+		if(autoRespawn == false) {
+			pause = true;
+		} else if(autoRespawn == true) {
+			start = true;
+		}
+	}
+	
+	
+	if(pause)
+		pauseGame();
+		
+	
+	if(start == true) {	
+		player.onGround = false;
+		player.jumping = false;
+		player.ufo = false;
+		player.g = 0;
+		player.xs1 = 0;
+		player.xs2 = 0;
+		
+		
+		hints = [];
+		boxes = [];
+		moveBoxes = [];
+		enemy = [];
+		arrows = [];
+		checkpoints = [];
+		
+		textDisplay = 0;
+		textTime = undefined;
+		fade = 0;
+		
+		
+		
+		drawLevel();
+		dead = false;
+		pause = false;
+		start = false;
+		
+		if(checkpoint == 0) {
+			screen.x = 0;
+			screen.y = 0;
+			screen.z = 0;
+		} else if(checkpoint > 0) {
+			for(var i = 0; i < checkpoints.length; i++) {
+					//reset from checkpoint
+				if(checkpoint == checkpoints[i].id) {
+					screen.x = cWidth / 2 - checkpoints[i].x;
+					screen.y = cHeight / 2 - checkpoints[i].y;
+					screen.z = checkpoints[i].z;
+					
+						//for level 4 when the enemy is chasing you throughout the level
+						//it resets the position from near the checkpoint and not from the start
+					for(var j = 0; j < enemy.length; j++) {
+						if(enemy[j].extra === "chase") {
+							enemy[j].x += checkpoints[i].x - enemy[j].r / 2;
+							enemy[j].y += checkpoints[i].y + checkpoints[i].r;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	if(button.q) {
+		noClip = !noClip;
+		button.q = false;
+	}
+	
+	
+	
+	if(textDisplay > 0)
+		fadeText(textDisplay);
+		
+	
+	mClick = false;
+}
+
+
+function drawBoxes() {
+	var i;
+	ctx.beginPath();
+	for(i = 0; i < boxes.length; i++) {
+		if(screen.z >= boxes[i].z && screen.z <= boxes[i].l) {
+			ctx.fillStyle = boxes[i].c;
+			ctx.fillRect(screen.x + boxes[i].x, screen.y + boxes[i].y, boxes[i].w, boxes[i].h);
+		}
+	}
+}
+
+function drawMoveBoxes() {
+	for(var i = 0; i < moveBoxes.length; i++) {
+		ctx.beginPath();
+		ctx.moveTo(screen.x + (Math.sin((rotation + 90 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].x + moveBoxes[i].size / 2), screen.y + (Math.cos((rotation + 90 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].y + moveBoxes[i].size / 2));
+		ctx.lineTo(screen.x + (Math.sin((rotation + 180 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].x - moveBoxes[i].size / 2) + moveBoxes[i].size, screen.y + (Math.cos((rotation + 180 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].y + moveBoxes[i].size / 2));
+		ctx.lineTo(screen.x + (Math.sin((rotation + 270 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].x - moveBoxes[i].size / 2) + moveBoxes[i].size, screen.y + (Math.cos((rotation + 270 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].y - moveBoxes[i].size / 2) + moveBoxes[i].size);
+		ctx.lineTo(screen.x + (Math.sin((rotation + 360 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].x + moveBoxes[i].size / 2), screen.y + (Math.cos((rotation + 360 + 45) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].y - moveBoxes[i].size / 2) + moveBoxes[i].size);
+		ctx.closePath();
+		ctx.fillStyle = moveBoxes[i].c;
+		ctx.fill();
+		
+/*		ctx.beginPath();
+		ctx.arc(screen.x + moveBoxes[i].x + 15, screen.y + moveBoxes[i].y + 15, (Math.sqrt(2 * 30 * 30)) / 2, 0, Math.PI * 2);
+		ctx.fillStyle = "#ff000055";
+		ctx.fill();
+		
+		
+		ctx.beginPath();
+		ctx.arc(screen.x + Math.sin((rotation + 135) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].x + moveBoxes[i].size / 2, screen.y + Math.cos((rotation + 135) * deg) * (Math.sqrt(2 * Math.pow(moveBoxes[i].size, 2)) / 2) + moveBoxes[i].y + moveBoxes[i].size / 2, 2, 0, Math.PI * 2)
+		ctx.fillStyle = "#000000";
+		ctx.fill();		*/
+	}
+}
+
+function moveBoxMechanics() {
+	var j, i;
+	for(j = 0; j < moveBoxes.length; j++) {
+		
+		if(moveBoxes[j].g < 10)
+			moveBoxes[j].g += moveBoxes[j].gAcc;
+			
+		
+		
+		for(i = 0; i < boxes.length; i++) {
+			//detecting collisions
+			var dis1 = (screen.x + boxes[i].x) - (screen.x + moveBoxes[j].x) - moveBoxes[j].size,
+				dis2 = (screen.x + moveBoxes[j].x) - moveBoxes[j].size - (screen.x + boxes[i].x) - boxes[i].w,
+				dis3 = (screen.y + boxes[i].y) - (screen.y + moveBoxes[j].y) - moveBoxes[j].size,
+				dis4 = (screen.y + boxes[i].y) + boxes[i].h - (screen.y + moveBoxes[j].y) + moveBoxes[j].size;
+					//left side
+			if(screen.x + moveBoxes[j].x <= screen.x + boxes[i].x + boxes[i].w && screen.y + moveBoxes[j].y + moveBoxes[j].size > screen.y + boxes[i].y && screen.y + moveBoxes[j].y - moveBoxes[j].size < screen.y + boxes[i].y + boxes[i].h && screen.x + moveBoxes[j].x > screen.x + boxes[i].x && player.y + player.size > screen.y + moveBoxes[j].y && player.y - player.size < screen.y + moveBoxes[j].y + moveBoxes[j].size && player.x - player.size < screen.x + moveBoxes[j].x + moveBoxes[j].size + 3 && player.x > screen.x + moveBoxes[j].x) {
+				player.xs2 = 0;
+			}
+					//right side
+			if(screen.x + moveBoxes[j].x + moveBoxes[j].size >= screen.x + boxes[i].x && screen.y + moveBoxes[j].y + moveBoxes[j].size > screen.y + boxes[i].y && screen.y + moveBoxes[j].y - moveBoxes[j].size < screen.y + boxes[i].y + boxes[i].h && screen.x + moveBoxes[j].x < screen.x + boxes[i].x + boxes[i].w && player.y + player.size > screen.y + moveBoxes[j].y && player.x - player.size < screen.y + moveBoxes[j].y + moveBoxes[j].size && player.x + player.size > screen.x + moveBoxes[j].x - 3 && player.x < screen.x + moveBoxes[j].x + moveBoxes[j].size) {
+				player.xs1 = 0;
+			}
+					//top side
+			if(moveBoxes[j].g >= dis3 && screen.y + moveBoxes[j].y < screen.y + boxes[i].y && screen.x + moveBoxes[j].x + moveBoxes[j].size > screen.x + boxes[i].x && screen.x + moveBoxes[j].x < screen.x + boxes[i].x + boxes[i].w) {
+				moveBoxes[j].g = dis3;
+			}
+					//bottom side
+			if(moveBoxes[j].g <= dis4 && moveBoxes[j].g < 0 && screen.x + moveBoxes[j].x + moveBoxes[j].size > screen.x + boxes[i].x && screen.x + moveBoxes[j].x - moveBoxes[j].size < screen.x +  boxes[i].x + boxes[i].w && screen.y + moveBoxes[j].y + moveBoxes[j].size > screen.y + boxes[i].y + boxes[i].h) {
+				moveBoxes[j].g = dis4;
+			}
+		}
+		
+		
+		moveBoxes[j].y += moveBoxes[j].g;
+		
+			//player collisions
+		var dis1 = (screen.x + moveBoxes[j].x) - player.x - player.size,
+			dis2 = player.x - player.size - (screen.x + moveBoxes[j].x) - moveBoxes[j].size,
+			dis3 = (screen.y + moveBoxes[j].y) - player.y - (player.size + 1),
+			dis4 = (screen.y + moveBoxes[j].y) + moveBoxes[j].size - player.y + player.size;
+				//left side
+		if(player.xs1 >= dis1 && player.y + player.size > screen.y + moveBoxes[j].y && player.y - player.size < screen.y + moveBoxes[j].y + moveBoxes[j].size && player.x < screen.x + moveBoxes[j].x + moveBoxes[j].size) {
+			moveBoxes[j].x += player.speed;
+			player.xs1 = dis1;
+		}
+				//right side
+		if(player.xs2 >= dis2 && player.y + player.size > screen.y + moveBoxes[j].y && player.y - player.size < screen.y + moveBoxes[j].y + moveBoxes[j].size && player.x > screen.x + moveBoxes[j].x) {
+			moveBoxes[j].x -= player.speed;
+			player.xs2 = dis2;
+		}
+				//top side
+		if(player.g >= dis3 && player.y < screen.y + moveBoxes[j].y && player.x + player.size > screen.x + moveBoxes[j].x && player.x - player.size < screen.x + moveBoxes[j].x + moveBoxes[j].size) {
+			player.g = dis3;
+			player.onGround = true;
+		}
+				//bottom side
+		if(player.g <= dis4 && player.g < 0 && player.x + player.size > screen.x + moveBoxes[j].x && player.x - player.size < screen.x + moveBoxes[j].x + moveBoxes[j].size && player.y + player.size > screen.y + moveBoxes[j].y + moveBoxes[j].size) {
+			player.g = 0;
+			player.jumpHeight = dis4;
+			moveBoxes[j].g = -moveBoxes[j].gAcc * 15;
+		}
+		
+		
+			
+	}
+}
+
+function drawGoal() {
+	if(Math.abs(screen.z) <= goal.r - 2) {
+		//outer circle
+		ctx.beginPath();
+		ctx.arc(screen.x + goal.x, screen.y + goal.y, goal.r - Math.abs(screen.z), 0, Math.PI * 2);
+		ctx.fillStyle = "#a1a100";
+		ctx.fill();
+		
+		if(noClip == false && (Math.sqrt(Math.pow(player.x - (screen.x + goal.x), 2) + Math.pow(player.y - (screen.y + goal.y), 2)) <= player.size + goal.r)) {
+			checkpoint = 0;
+			start = true;
+			level++
+		}
+	} else {
+		//exclamation point for when you can't see the goal
+		ctx.beginPath();
+		ctx.fillStyle="#a1a100";
+		ctx.font="20px, Georgia";
+		ctx.textAlign="center";
+		ctx.fillText("!!", screen.x + goal.x, screen.y + goal.y);
+	}
+	
+	if(Math.abs(screen.z) <= goal.r / 1.5) {
+		//inner circle
+		ctx.beginPath();
+		ctx.arc(screen.x + goal.x, screen.y + goal.y, goal.r / 1.5 - Math.abs(screen.z), 0, Math.PI * 2);
+		ctx.fillStyle = "#ffffff";		//white to make it look like a ring
+		ctx.fill();
+	}
+}
+
+function drawHints() {
+	var i;
+	for(i = 0; i < hints.length; i++) {
+		if(textDisplay > 0) {
+			ctx.fillStyle="#ff0000";
+		} else {
+			ctx.fillStyle="#000000";
+		}
+			
+		ctx.beginPath();
+		ctx.font="20px, Georgia";
+		ctx.fillText("!", screen.x + hints[i].x, screen.y + hints[i].y);
+		
+		if(textTime === undefined && button.t == true && (Math.sqrt(Math.pow(player.x - (screen.x + hints[i].x), 2) + Math.pow(player.y - (screen.y + hints[i].y), 2)) <= player.size + hints[i].radius)) {
+			textTime = 0;
+			textDisplay = hints[i].id;
+			button.t = false;
+		}
+	}
+}
+
+function drawArrows() {
+	var i;
+	for(i = 0; i < arrows.length; i++) {
+			//rectangle part
+		ctx.beginPath();
+		ctx.rect(screen.x + arrows[i].x, screen.y + arrows[i].y, arrows[i].size * 2, arrows[i].size)
+		ctx.closePath();
+		ctx.fillStyle = arrows[i].c;
+		ctx.fill();
+		
+			//triangle part
+		ctx.beginPath();
+		ctx.moveTo(screen.x + arrows[i].x + arrows[i].size * 2, screen.y + arrows[i].y - arrows[i].size / 2);
+		ctx.lineTo(screen.x + arrows[i].x + arrows[i].size * 3, screen.y + arrows[i].y + arrows[i].size / 2);
+		ctx.lineTo(screen.x + arrows[i].x + arrows[i].size * 2, screen.y + arrows[i].y + arrows[i].size * 1.5);
+		ctx.closePath();
+		ctx.fillStyle = arrows[i].c;
+		ctx.fill();
+	}
+}
+
+function drawCheckpoints() {
+	var i;
+	for(i = 0; i < checkpoints.length; i++) {
+		if(checkpoints[i].id != checkpoint) {
+			if(Math.abs(screen.z) <= checkpoints[i].r - 2) {
+				//outer circle
+				ctx.beginPath();
+				ctx.arc(screen.x + checkpoints[i].x, screen.y + checkpoints[i].y, goal.r - Math.abs(screen.z), 0, Math.PI * 2);
+				ctx.fillStyle = "#008282";
+				ctx.fill();
+				
+				if(player.ufo == false && noClip == false && (Math.sqrt(Math.pow(player.x - (screen.x + checkpoints[i].x), 2) + Math.pow(player.y - (screen.y + checkpoints[i].y), 2)) <= player.size + checkpoints[i].r)) {
+					checkpoint = checkpoints[i].id;
+				}
+			} else {
+				//exclamation point for when you can't see the goal
+				ctx.beginPath();
+				ctx.fillStyle="#008282";
+				ctx.font="20px, Georgia";
+				ctx.textAlign="center";
+				ctx.fillText("!!", screen.x + checkpoints[i].x, screen.y + checkpoints[i].y);
+			}
+			
+			if(Math.abs(screen.z) <= checkpoints[i].r / 1.5) {
+				//inner circle
+				ctx.beginPath();
+				ctx.arc(screen.x + checkpoints[i].x, screen.y + checkpoints[i].y, checkpoints[i].r / 1.5 - Math.abs(screen.z), 0, Math.PI * 2);
+				ctx.fillStyle = "#ffffff";		//white to make it look like a ring
+				ctx.fill();
+			}
+		}
+	}
+}
+
+function drawPlayer() {
+	//mechanics
+	if(pause == false) {
+		if(noClip == false) {
+			player.xs1 = player.speed;
+			player.xs2 = player.speed;
+			player.jumpHeight = player.maxJumpHeight
+			
+			if(player.ufoTimer > 0) {
+				player.ufo = false;
+				player.ufoTimer--
+			}
+			if(player.g <= 10)
+				player.g += player.gAcc;
+				
+			player.onGround = false;
+		}
+	}
+	
+		//drawing player
+	if(player.ufo) {		
+		ctx.beginPath();
+		ctx.ellipse(player.x, player.y, player.size/2, player.size/2 * 2, Math.PI / 2, 0, Math.PI * 2);
+		ctx.stroke();
+		ctx.fillStyle = "#00ff00";
+		ctx.fill();
+
+		ctx.beginPath();
+		ctx.arc(player.x, player.y - player.size/2 / 2, player.size/2, Math.PI, Math.PI * 2);
+		ctx.stroke();
+		ctx.fill();
+
+		
+	} else {		
+		ctx.beginPath();
+		ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
+		ctx.stroke();
+		ctx.fillStyle = "#00ff00";
+		ctx.fill();
+	}
+}
+
+
+function drawEnemy() {
+	var i;
+	for(i = 0; i < enemy.length; i++) {
+		ctx.fillStyle="#ff0000";
+		if(enemy[i].direction === "left") {
+			ctx.beginPath();
+			ctx.arc(screen.x + enemy[i].x, screen.y + enemy[i].y, enemy[i].r, Math.PI / 2, Math.PI * 1.5);
+			ctx.closePath()
+			ctx.fill();
+		}
+		if(enemy[i].direction === "right") {
+			ctx.beginPath();
+			ctx.arc(screen.x + enemy[i].x, screen.y + enemy[i].y, enemy[i].r, Math.PI * 1.5, Math.PI / 2);
+			ctx.closePath()
+			ctx.fill();
+		}
+		if(enemy[i].direction === "up") {
+			ctx.beginPath();
+			ctx.arc(screen.x + enemy[i].x, screen.y + enemy[i].y, enemy[i].r, Math.PI, Math.PI * 2);
+			ctx.closePath()
+			ctx.fill();
+		}
+		if(enemy[i].direction === "down") {
+			ctx.beginPath();
+			ctx.arc(screen.x + enemy[i].x, screen.y + enemy[i].y, enemy[i].r, 0, Math.PI);
+			ctx.closePath()
+			ctx.fill();
+		}
+		if(enemy[i].ball) {
+			ctx.beginPath();
+			ctx.arc(screen.x + enemy[i].x, screen.y + enemy[i].y, enemy[i].r, 0, Math.PI * 2);
+			ctx.closePath()
+			ctx.fill();
+		}
+	}
+}
+
+function enemyMechanics() {
+	var i, j, k;
+	for(j = 0; j < enemy.length; j++) {
+		if(enemy[j].type === "move") {
+			if(enemy[j].direction === "left")
+				enemy[j].x -= enemy[j].speed;
+			if(enemy[j].direction === "right")
+				enemy[j].x += enemy[j].speed;
+			if(enemy[j].direction === "up")
+				enemy[j].y -= enemy[j].speed;
+			if(enemy[j].direction === "down")
+				enemy[j].y += enemy[j].speed;
+		}
+
+		if(enemy[j].type === "move" && enemy[j].noClip == false) {
+			for(i = 0; i < boxes.length; i++) {
+				if(screen.z >= boxes[i].z && screen.z <= boxes[i].l) {
+							//left side
+					if(enemy[j].direction === "left" && screen.x + enemy[j].x - enemy[j].r <= screen.x + boxes[i].x + boxes[i].w && screen.y + enemy[j].y + enemy[j].r > screen.y + boxes[i].y && screen.y + enemy[j].y - enemy[j].r < screen.y + boxes[i].y + boxes[i].h && screen.x + enemy[j].x > screen.x + boxes[i].x) {
+						enemy[j].direction = "right";
+					}
+					if(enemy[j].fall == false && enemy[j].direction === "left" && screen.x + enemy[j].x - enemy[j].r <= screen.x + boxes[i].x && screen.y + enemy[j].y + enemy[j].r + 5 > screen.y + boxes[i].y && screen.y + enemy[j].y - enemy[j].r < screen.y + boxes[i].y + boxes[i].h && screen.x + enemy[j].x > screen.x + boxes[i].x) {
+						enemy[j].direction = "right";
+					}
+							//right side
+					if(enemy[j].direction === "right" && screen.x + enemy[j].x + enemy[j].r >= screen.x + boxes[i].x && screen.y + enemy[j].y + enemy[j].r > screen.y + boxes[i].y && screen.y + enemy[j].y - enemy[j].r < screen.y + boxes[i].y + boxes[i].h && screen.x + enemy[j].x < screen.x + boxes[i].x + boxes[i].w) {
+						enemy[j].direction = "left";
+					}
+					if(enemy[j].fall == false && enemy[j].direction === "right" && screen.x + enemy[j].x + enemy[j].r >= screen.x + boxes[i].x + boxes[i].w && screen.y + enemy[j].y + enemy[j].r + 5 > screen.y + boxes[i].y && screen.y + enemy[j].y - enemy[j].r < screen.y + boxes[i].y + boxes[i].h && screen.x + enemy[j].x < screen.x + boxes[i].x + boxes[i].w) {
+						enemy[j].direction = "left";
+					}
+							//top side
+					if(enemy[j].direction === "up" && screen.y + enemy[j].y - enemy[j].r <= screen.y + boxes[i].y + boxes[i].h && screen.x + enemy[j].x + enemy[j].r > screen.x + boxes[i].x && screen.x + enemy[j].x - enemy[j].r < screen.x + boxes[i].x + boxes[i].w && screen.y + enemy[j].y > screen.y + boxes[i].y) {
+						enemy[j].direction = "down";
+					}
+							//bottom side
+					if(enemy[j].direction === "down" && screen.y + enemy[j].y + enemy[j].r >= screen.y + boxes[i].y && screen.x + enemy[j].x + enemy[j].r > screen.x + boxes[i].x && screen.x + enemy[j].x - enemy[j].r < screen.x + boxes[i].x + boxes[i].w && screen.y + enemy[j].y < screen.y + boxes[i].y + boxes[i].h) {
+						enemy[j].direction = "up";
+					}
+				}
+			}
+				//moveBox
+				if(moveBoxes.length > 0) {
+				for(k = 0; k < boxes.length; k++) {
+							//left side
+					if(enemy[j].direction === "left" && screen.x + enemy[j].x - enemy[j].r <= screen.x + moveBoxes[j].x + moveBoxes[j].size && screen.y + enemy[j].y + enemy[j].r > screen.y + moveBoxes[j].y && screen.y + enemy[j].y - enemy[j].r < screen.y + moveBoxes[j].y + moveBoxes[j].size && screen.x + enemy[j].x > screen.x + moveBoxes[j].x) {
+						enemy[j].direction = "right";
+					}
+					if(enemy[j].fall == false && enemy[j].direction === "left" && screen.x + enemy[j].x - enemy[j].r <= screen.x + moveBoxes[j].x && screen.y + enemy[j].y + enemy[j].r + 5 > screen.y + moveBoxes[j].y && screen.y + enemy[j].y - enemy[j].r < screen.y + moveBoxes[j].y + moveBoxes[j].size && screen.x + enemy[j].x > screen.x + moveBoxes[j].x) {
+						enemy[j].direction = "right";
+					}
+							//right side
+					if(enemy[j].direction === "right" && screen.x + enemy[j].x + enemy[j].r >= screen.x + moveBoxes[j].x && screen.y + enemy[j].y + enemy[j].r > screen.y + moveBoxes[j].y && screen.y + enemy[j].y - enemy[j].r < screen.y + moveBoxes[j].y + moveBoxes[j].size && screen.x + enemy[j].x < screen.x + moveBoxes[j].x + moveBoxes[j].size) {
+						enemy[j].direction = "left";
+					}
+					if(enemy[j].fall == false && enemy[j].direction === "right" && screen.x + enemy[j].x + enemy[j].r >= screen.x + moveBoxes[j].x + moveBoxes[j].size && screen.y + enemy[j].y + enemy[j].r + 5 > screen.y + moveBoxes[j].y && screen.y + enemy[j].y - enemy[j].r < screen.y + moveBoxes[j].y + moveBoxes[j].size && screen.x + enemy[j].x < screen.x + moveBoxes[j].x + moveBoxes[j].size) {
+						enemy[j].direction = "left";
+					}
+							//top side
+					if(enemy[j].direction === "up" && screen.y + enemy[j].y - enemy[j].r <= screen.y + moveBoxes[j].y + moveBoxes[j].size && screen.x + enemy[j].x + enemy[j].r > screen.x + moveBoxes[j].x && screen.x + enemy[j].x - enemy[j].r < screen.x + moveBoxes[j].x + moveBoxes[j].size && screen.y + enemy[j].y > screen.y + moveBoxes[j].y) {
+						enemy[j].direction = "down";
+					}
+							//bottom side
+					if(enemy[j].direction === "down" && screen.y + enemy[j].y + enemy[j].r >= screen.y + moveBoxes[j].y && screen.x + enemy[j].x + enemy[j].r > screen.x + moveBoxes[j].x && screen.x + enemy[j].x - enemy[j].r < screen.x + moveBoxes[j].x + moveBoxes[j].size && screen.y + enemy[j].y < screen.y + moveBoxes[j].y + moveBoxes[j].size) {
+						enemy[j].direction = "up";
+					}
+				}
+			}
+		}
+		
+		
+				//collision with player
+		if(enemy[j].ball == false) {
+			if(enemy[j].r > 0 && noClip == false) {
+						//left side
+				if(screen.x + enemy[j].x - enemy[j].r <= player.x + player.size && screen.y + enemy[j].y + enemy[j].r > player.y - player.size && screen.y + enemy[j].y - enemy[j].r < player.y + player.size && screen.x + enemy[j].x > player.x) {
+					if(enemy[j].ball == false && enemy[j].direction === "right" && player.ufo == false) {
+						enemy[j].r = 0;
+					} else {
+						dead = true;
+					}
+				}
+						//right side
+				if(screen.x + enemy[j].x + enemy[j].r >= player.x - player.size && screen.y + enemy[j].y + enemy[j].r > player.y - player.size && screen.y + enemy[j].y - enemy[j].r < player.y + player.size && screen.x + enemy[j].x < player.x) {
+					if(enemy[j].ball == false && enemy[j].direction === "left" && player.ufo == false) {
+						enemy[j].r = 0;
+					} else {
+						dead = true;
+					}
+				}
+			}
+		} else if(noClip == false && enemy[j].ball == true && (Math.sqrt(Math.pow(player.x - (screen.x + enemy[j].x), 2) + Math.pow(player.y - (screen.y + enemy[j].y), 2)) <= player.size + enemy[j].r)) {
+			dead = true;
+		}
+	}
+}
+
+function boxCollision() {
+	var i;
+	for(i = 0; i < boxes.length; i++) {
+		if(boxes[i].move === "right") {
+			boxes[i].x += boxes[i].xs;
+			boxes[i].xd++
+			if(boxes[i].xd >= boxes[i].xdMax) {
+				boxes[i].move = "left";
+				boxes[i].xd = 0;
+			}
+		} else if(boxes[i].move === "left") {
+			boxes[i].x -= boxes[i].xs;
+			boxes[i].xd++
+			if(boxes[i].xd >= boxes[i].xdMax) {
+				boxes[i].move = "right";
+				boxes[i].xd = 0;
+			}
+		}
+		if(boxes[i].move === "up") {
+			boxes[i].y -= boxes[i].ys;
+			boxes[i].yd++
+			if(boxes[i].yd >= boxes[i].ydMax) {
+				boxes[i].move = "down";
+				boxes[i].yd = 0;
+			}
+		} else if(boxes[i].move === "down") {
+			boxes[i].y += boxes[i].ys;
+			boxes[i].yd++
+			if(boxes[i].yd >= boxes[i].ydMax) {
+				boxes[i].move = "up";
+				boxes[i].yd = 0;
+			}
+		}
+		
+		if(screen.z >= boxes[i].z && screen.z <= boxes[i].l) {
+	
+			//detecting collisions
+			var dis1 = (screen.x + boxes[i].x) - player.x - player.size,
+				dis2 = player.x - player.size - (screen.x + boxes[i].x) - boxes[i].w,
+				dis3 = (screen.y + boxes[i].y) - player.y - player.size,
+				dis4 = (screen.y + boxes[i].y) + boxes[i].h - player.y + player.size;
+					//left side
+			if(player.xs1 >= dis1 && player.y + player.size > screen.y + boxes[i].y && player.y - player.size < screen.y + boxes[i].y + boxes[i].h && player.x < screen.x + boxes[i].x + boxes[i].w) {
+				player.xs1 = dis1;
+				if(boxes[i].c === "#ff0000")
+					dead = true;
+				if(boxes[i].c === "#0021CB" && player.ufo == true)
+					dead = true;
+			}
+					//right side
+			if(player.xs2 >= dis2 && player.y + player.size > screen.y + boxes[i].y && player.y - player.size < screen.y + boxes[i].y + boxes[i].h && player.x > screen.x + boxes[i].x) {
+				player.xs2 = dis2;
+				if(boxes[i].c === "#ff0000")
+					dead = true;
+				if(boxes[i].c === "#0021CB" && player.ufo == true)
+					dead = true;
+			}
+					//top side
+			if(player.g >= dis3 && player.y < screen.y + boxes[i].y && player.x + player.size > screen.x + boxes[i].x && player.x - player.size < screen.x + boxes[i].x + boxes[i].w) {
+				player.g = dis3;
+				player.onGround = true;
+				if(boxes[i].c === "#ff0000")
+					dead = true;
+				if(boxes[i].c === "#0021CB" && player.ufo == true)
+					dead = true;
+				if(boxes[i].move === "right")
+					screen.x -= boxes[i].xs;
+				if(boxes[i].move === "left")
+					screen.x += boxes[i].xs;
+				if(boxes[i].move === "up")
+					screen.y += boxes[i].ys;
+			}
+					//bottom side
+			if(player.g <= dis4 && player.g < 0 && player.x + player.size > screen.x + boxes[i].x && player.x - player.size < screen.x +  boxes[i].x + boxes[i].w && player.y + player.size > screen.y + boxes[i].y + boxes[i].h) {
+				player.g = 0;
+				player.y += 1;
+				player.jumpHeight = dis4
+				if(boxes[i].c === "#ff0000")
+					dead = true;
+				if(boxes[i].c === "#0021CB" && player.ufo == true)
+					dead = true;
+			}
+		}
+	}
+}
+
+function mechanics() {
+	if(button.space == true && button.spaceTimer == 0 && player.ufoTimer == 0) {
+		player.g = player.jumpHeight;
+		button.spaceTimer = 20;
+	}
+	if(button.space == true && player.onGround == false) {
+		player.ufo = true;
+	} else if(player.onGround == true) {
+		player.ufo = false;
+	}
+	if(button.spaceTimer > 0)
+		button.spaceTimer--
+	
+	
+	if(button.w == true && player.onGround == true)
+		player.jumping = true;
+	if(player.jumping == true) {
+		player.g = player.jumpHeight;
+		player.jumping = false;
+	}
+	
+		
+	if(button.d)
+		screen.x -= player.xs1;
+	if(button.a)
+		screen.x += player.xs2;
+		
+	screen.y -= player.g;
+	
+	if(unlockedZ) {
+		if(button.up)
+			screen.z++
+		if(button.down)
+			screen.z--
+	}
+	
+	
+	
+	if(button.r) {
+		start = true
+		button.r = false;
+	}
+}
+
+
+function noClipMechanics() {
+	if(button.shft == true) {
+		noClipSpeed = noClipSpeedMax * 2;
+	} else if(button.f == true) {
+		noClipSpeed = noClipSpeedMax / 2;
+	} else {
+		noClipSpeed = noClipSpeedMax;
+	}
+	if(button.space) {
+		player.ufo = !player.ufo;
+		button.space = false;
+	}
+		
+		
+	if(button.w)
+		screen.y += noClipSpeed;
+	if(button.s)
+		screen.y -= noClipSpeed;
+	if(button.a)
+		screen.x += noClipSpeed;
+	if(button.d)
+		screen.x -= noClipSpeed;
+		
+		
+	if(button.up)
+		screen.z++
+	if(button.down)
+		screen.z--
+	if(button.left) {
+		screen.z++
+		button.left = false;
+	}
+	if(button.right) {
+		screen.z--
+		button.right = false;
+	}
+			
+			
+	if(button.r)
+		screen.z = 0;
+}
+
+
+
+
+function mainMenu() {
+	ctx.beginPath();
+	ctx.fillStyle="#000000";
+		if(button.esc)
+			startOptions = "Play";
+			
+	if(startOptions === "Play") {
+		ctx.font="50px Verdana";
+		if(mouseX >= cWidth / 2 - 65 && mouseX <= cWidth / 2 + 70 && mouseY >= cHeight / 3 - 45 && mouseY <= cHeight / 3 + 30) {
+			ctx.font="55px Verdana";
+				
+			if(mClick) {
+				startOptions = "NewGame/Continue";
+				mClick = false;
+			}
+		}
+		ctx.textAlign="center";
+		ctx.fillText("Play", cWidth / 2, cHeight / 3);
+	}
+		
+	if(startOptions === "NewGame/Continue") {
+		ctx.font="50px Verdana";
+		if(mouseX >= cWidth / 2 - 160 && mouseX <= cWidth / 2 + 170 && mouseY >= cHeight / 3 - 45 && mouseY <= cHeight / 3 + 30) {
+			ctx.font="55px Verdana";
+				
+			if(mClick) {
+				startOptions = "NewGame";
+				start = true;
+				level = 1;
+				drawLevel();
+				mClick = false;
+			}
+		}
+		ctx.textAlign="center";
+		ctx.fillText("New Game", cWidth / 2, cHeight / 3);
+			
+		ctx.font="50px Verdana";
+		if(mouseX >= cWidth / 2 - 125 && mouseX <= cWidth / 2 + 130 && mouseY >= cHeight / 1.5 - 45 && mouseY <= cHeight / 1.5 + 30) {
+			ctx.font="55px Verdana";
+				
+			if(mClick) {
+				startOptions = "Continue";
+				mClick = false;
+			}
+		}
+		ctx.textAlign="center";
+		ctx.fillText("Continue", cWidth / 2, cHeight / 1.5);
+	}
+}
+
+
+function pauseGame() {
+	//making it greyer for effect
+	ctx.beginPath();
+	ctx.fillStyle = "#00000055";
+	ctx.fillRect(0, 0, cWidth, cHeight);
+	
+	//grey pause box
+	ctx.beginPath();
+	ctx.fillStyle = "#555555ee";
+	ctx.fillRect(cWidth / 6, cHeight / 6, cWidth / 1.5, cHeight / 1.5);
+	
+	//buttons
+	ctx.save();
+	ctx.fillStyle="#000000";
+	ctx.font="30px Verdana";
+			if(mouseX >= cWidth / 2 - 85 && mouseX <= cWidth / 2 + 90 && mouseY >= cHeight / 3 - 25 && mouseY <= cHeight / 3 + 10) {
+				ctx.font="35px Verdana";
+				
+				if(mClick) {
+					pause = false;
+					mClick = false;
+				}
+			}
+			ctx.textAlign="center";
+			ctx.fillText("Resume", cWidth / 2, cHeight / 3);
+			
+	ctx.font="30px Verdana";
+			if(mouseX >= cWidth / 2 - 65 && mouseX <= cWidth / 2 + 70 && mouseY >= cHeight / 2 - 25 && mouseY <= cHeight / 2 + 10) {
+				ctx.font="35px Verdana";
+				
+				if(mClick) {
+					start = true;
+					dead = false;
+					pause = false;
+					mClick = false;
+				}
+			}
+			ctx.textAlign="center";
+			ctx.fillText("Respawn", cWidth / 2, cHeight / 2);
+			
+		ctx.font="30px Verdana";
+		if(mouseX >= cWidth / 2 - 95 && mouseX <= cWidth / 2 + 100 && mouseY >= cHeight / 1.5 - 25 && mouseY <= cHeight / 1.5 + 10) {
+			ctx.font="35px Verdana";
+			
+			if(mClick) {
+				dead = false;
+				pause = false;
+				startOptions = "Play";
+				level = 0;
+				textTime = undefined;
+				textDisplay = 0;
+				mClick = false;
+			}
+		}
+		ctx.textAlign="center";
+		ctx.fillText("Main Menu", cWidth / 2, cHeight / 1.5);
+		
+		ctx.font="15px Verdana";
+		if(mouseX >= cWidth / 4.5 - 5 && mouseX <= cWidth / 4.5 + 5 && mouseY >= cHeight / 1.25 - 20 && mouseY <= cHeight / 1.25) {
+			ctx.fillStyle = "#55aa55";
+			ctx.fillRect(cWidth / 4.5 - 4, cHeight / 1.25 - 9, 8, 8);
+			
+			if(mClick) {
+				autoRespawn = !autoRespawn;
+				mClick = false;
+			}
+		}		
+		ctx.beginPath();
+		ctx.fillStyle = "#000000";
+		ctx.strokeStyle="#000000";
+		ctx.rect(cWidth / 4.5 - 5, cHeight / 1.25 - 10, 10, 10);
+		ctx.stroke();
+		ctx.textAlign="center";
+		ctx.fillText("Auto Respawn", cWidth / 3, cHeight / 1.25);
+		
+		if(autoRespawn) {
+			ctx.beginPath();
+			ctx.strokeStyle="#55ff55";
+			ctx.moveTo(cWidth / 4.5 - 2, cHeight / 1.25 - 5);
+			ctx.lineTo(cWidth / 4.5 + 3, cHeight / 1.25 - 2);
+			ctx.lineTo(cWidth / 4.5 + 9, cHeight / 1.25 - 15);
+			ctx.stroke();
+			
+		}
+		
+		
+	ctx.restore();
+}
+
+
+function drawLevel() {
+	if(level == 1)
+		level1();
+	if(level == 2)
+		level2();
+	if(level == 3)
+		level3();
+	if(level == 4)
+		level4();
+	if(level == 5)
+		level5();
+}
+
+setInterval(main, 10);	//milliseconds (1000 = 1 second) 
+</script>
+
+
+<script src="levels/level1.html"></script>
+<script src="levels/level2.html"></script>
+<script src="levels/level3.html"></script>
+<script src="levels/level4.html"></script>
+<script src="levels/level5.html"></script>
+
+
+</body>
+</html>
