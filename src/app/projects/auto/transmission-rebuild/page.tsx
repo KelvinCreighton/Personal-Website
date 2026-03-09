@@ -226,8 +226,96 @@ export default function AutomotiveProjectTemplate() {
 
           <h2 className="mb-4 text-xl font-bold">Step 6: Transmission Teardown</h2>
           <p>
-            30 years of grease and dirt build up. The initial teardown process required many hours of just scrapping clumps of grease from the main case and bell housing.
+            30 years of grease and dirt build up. The initial teardown process required many hours of just scrapping clumps of grease from the main case and bell housing. This included disassembling the speedometer gear housing, shifter lever, shfit detent balls, throwout bearing, the case bolts, etc.
           </p>
+
+          <div className="flex flex-col gap-6 my-10">
+            {/* Top row: 2 images side-by-side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-6-1.jpg"
+                    alt="Transmission"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+                <figcaption className="text-sm text-gray-500 mt-2 text-center">Transmission</figcaption>
+              </figure>
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-6-2.jpg"
+                    alt="Speedometer Gear Housing Teardown"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+                <figcaption className="text-sm text-gray-500 mt-2 text-center">Speedometer Gear Housing Teardown</figcaption>
+              </figure>
+            </div>
+
+            {/* Middle row: 2 images side-by-side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-6-3.jpg"
+                    alt="Transmission Half Degreased"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+                <figcaption className="text-sm text-gray-500 mt-2 text-center">Transmission Half Degreased</figcaption>
+              </figure>
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-6-4.jpg"
+                    alt="Shifter Lever and Throwout Bearing"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+                <figcaption className="text-sm text-gray-500 mt-2 text-center">Shifter Lever and Throwout Bearing</figcaption>
+              </figure>
+            </div>
+
+
+
+            {/* Bottom row: 2 images side-by-side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-6-5.jpg"
+                    alt="Disassembled Parts"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+                <figcaption className="text-sm text-gray-500 mt-2 text-center">Disassembled Parts</figcaption>
+              </figure>
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-6-6.jpg"
+                    alt="Shfit Detent Balls"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+                <figcaption className="text-sm text-gray-500 mt-2 text-center">Shfit Detent Balls</figcaption>
+              </figure>
+            </div>
+          </div>
 
           {/* Video Placeholder */}
           <div className="my-12">
@@ -251,6 +339,6 @@ export default function AutomotiveProjectTemplate() {
 
         </div>
       </article>
-    </main>
+    </main >
   );
 }
