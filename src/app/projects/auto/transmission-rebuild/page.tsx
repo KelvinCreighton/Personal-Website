@@ -735,8 +735,60 @@ export default function AutomotiveProjectTemplate() {
                   />
                 </div>
                 <figcaption className="text-sm text-gray-500 mt-2 text-center">
-                  Removed Transaxle with 2nd and 1st Gear
+                  Removed Transaxle, 2nd Gear & 1st Gear
                 </figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <h2 className="mb-4 text-xl font-bold">
+            Step 10: Rebuilding the Transmission
+          </h2>
+          <p>
+            Rebuilding the transmission was a LOT harder than tearing it down.
+            Multiple times I put the synchros in the wrong orientation or messed
+            up the linkages. By the end of it I had dismantled and reassembled
+            the transmission 3 times, testing the shifting by hand to make sure
+            everything worked properly. I wont show the images here, it just
+            looks the same as dissassembly but in reverse but with gallons of
+            brake cleaner.
+          </p>
+          <p>
+            I replaced as much as I could but some of the bearings were really
+            trapped in there and since they were still in great condition I
+            opted to leave them alone.
+          </p>
+          <br />
+          <p>
+            The last thing to do was clean the mating surface between the main
+            case and bell housing with soft sandpaper to remove old excess
+            gasket (this was done during disassembling). Then install the new
+            gasket with a thin layer of Black RTV to ensure a good seal.
+          </p>
+
+          <div className="flex flex-col gap-6 my-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-10-1.png"
+                    alt="Step 10-1"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+              </figure>
+              <figure className="m-0">
+                <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
+                  <Image
+                    src="/images/projects/transmission-step-10-2.png"
+                    alt="Step 10-2"
+                    width={4032}
+                    height={3024}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
               </figure>
             </div>
           </div>
