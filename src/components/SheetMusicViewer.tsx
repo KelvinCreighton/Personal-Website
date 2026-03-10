@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import AudioPlayer from 'osmd-audio-player';
+import { PlaybackEvent } from 'osmd-audio-player/dist/PlaybackEngine';
 
 interface SheetMusicViewerProps {
   file: string;
@@ -127,13 +128,13 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
         setAudioPlayer(player);
 
         try {
-          await player.loadScore(osmd);
+          await player.loadScore(osmd as any);
           if (!cancelled) setAudioReady(true);
         } catch (audioErr) {
           console.error("Audio Player failed to load score:", audioErr);
         }
 
-        player.on("state-change", (state) => {
+        player.on(PlaybackEvent.STATE_CHANGE, (state) => {
           setIsPlaying(state === "PLAYING");
         });
 
@@ -172,7 +173,7 @@ export default function SheetMusicViewer({ file }: SheetMusicViewerProps) {
       audioPlayer.pause();
     } else {
       // Modify the library's internal wantedZIndex
-      osmd.cursor.wantedZIndex = 10;
+      osmd.cursor.wantedZIndex = '10';
       osmd.cursor.cursorElement.style.zIndex = '10 !important';
       scaleCursor();
       osmd.cursor.show();

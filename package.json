@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "GIT_SSH_COMMAND=\"ssh -i ~/.ssh/kelvincreighton-github -o IdentitiesOnly=yes\" gh-pages -d out --nojekyll"
+    "deploy": "GIT_SSH_COMMAND=\"ssh -i ~/.ssh/kelvincreighton-github -o IdentitiesOnly=yes\" gh-pages -d out --nojekyll --cname kelvincreighton.ca"
   },
   "dependencies": {
     "lucide-react": "^0.575.0",

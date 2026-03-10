@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: "Kelvin's Personal Website",
     description:
       "Portfolio and blog showcasing past, current, and future projects.",
-    url: "https://yourdomain.com",
+    url: "https://kelvincreighton.ca",
     siteName: "Kelvin's Portfolio",
     locale: "en_US",
     type: "website",
