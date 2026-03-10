@@ -53,8 +53,7 @@ export default function Home() {
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
                   A collection of writeups and solutions for various Capture The
-                  Flag challenges, demonstrating vulnerability analysis and
-                  exploitation techniques.
+                  Flag challenges, demonstrating web exploitation techniques.
                 </p>
               </div>
             </div>
