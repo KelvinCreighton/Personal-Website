@@ -16,7 +16,8 @@
     "opensheetmusicdisplay": "^1.9.7",
     "osmd-audio-player": "^0.7.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
