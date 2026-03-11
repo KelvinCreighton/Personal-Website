@@ -14,7 +14,7 @@ export function NavBar() {
   ];
 
   return (
-    <ul className="flex space-x-6 font-medium">
+    <ul className="flex space-x-4 md:space-x-6 text-sm md:text-base font-medium flex-wrap">
       {links.map((link) => {
         const isActive =
           link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);

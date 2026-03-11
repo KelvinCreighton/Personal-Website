@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export default function AutomotiveProjectTemplate() {
   return (
-    <main className="flex min-h-screen flex-col items-center p-24 bg-white dark:bg-black">
-      <article className="w-full max-w-4xl flex flex-col items-start">
+    <main className="flex flex-col items-center p-6 md:p-12 lg:p-24 bg-white dark:bg-black w-full">
+      <article className="w-full max-w-4xl flex flex-col items-start px-2 md:px-0">
         {/* Navigation */}
         <Link
           href="/projects/auto"
@@ -125,7 +125,7 @@ export default function AutomotiveProjectTemplate() {
           </p>
 
           {/* Step 1 Images - Side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 my-8 md:my-10">
             <figure className="m-0">
               <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                 <Image
@@ -181,7 +181,7 @@ export default function AutomotiveProjectTemplate() {
           </p>
 
           {/* Side by side images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 my-8 md:my-10">
             <figure className="m-0">
               <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                 <Image
@@ -338,7 +338,7 @@ export default function AutomotiveProjectTemplate() {
 
           <div className="flex flex-col gap-6 my-10">
             {/* Top row: 2 images side-by-side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -370,7 +370,7 @@ export default function AutomotiveProjectTemplate() {
             </div>
 
             {/* Middle row: 2 images side-by-side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -402,7 +402,7 @@ export default function AutomotiveProjectTemplate() {
             </div>
 
             {/* Bottom row: 2 images side-by-side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -458,7 +458,7 @@ export default function AutomotiveProjectTemplate() {
 
           <div className="flex flex-col gap-6 my-10">
             {/* Top row: 2 images side-by-side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -484,7 +484,7 @@ export default function AutomotiveProjectTemplate() {
             </div>
 
             {/* Middle row: 2 images side-by-side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -510,7 +510,7 @@ export default function AutomotiveProjectTemplate() {
             </div>
 
             {/* Bottom row: 2 images side-by-side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -570,7 +570,7 @@ export default function AutomotiveProjectTemplate() {
 
           <div className="flex flex-col gap-6 my-10">
             {/* Top row: 2 images side-by-side */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -616,7 +616,7 @@ export default function AutomotiveProjectTemplate() {
           </p>
 
           <div className="flex flex-col gap-6 my-10">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -660,7 +660,7 @@ export default function AutomotiveProjectTemplate() {
                 </figcaption>
               </figure>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -690,7 +690,7 @@ export default function AutomotiveProjectTemplate() {
                 </figcaption>
               </figure>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -720,7 +720,7 @@ export default function AutomotiveProjectTemplate() {
                 </figcaption>
               </figure>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
@@ -778,7 +778,7 @@ export default function AutomotiveProjectTemplate() {
           </p>
 
           <div className="flex flex-col gap-6 my-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <figure className="m-0">
                 <div className="relative w-full rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 border border-gray-100 dark:border-gray-800">
                   <Image
